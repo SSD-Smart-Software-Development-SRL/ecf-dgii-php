@@ -420,6 +420,20 @@ La documentacion completa del API de ECF SSD esta disponible en:
 
 Incluye referencia de todos los endpoints, schemas, codigos de error y ejemplos de request/response.
 
+## Integracion con Frontend (TypeScript / React)
+
+Si tu aplicacion PHP tiene un frontend en React o TypeScript, puedes usar los SDKs de frontend para consultar el estado de los comprobantes directamente desde el cliente, sin pasar por tu backend:
+
+```bash
+# TypeScript / Node.js
+npm install ecf-dgii-client
+
+# React (incluye hooks y componentes)
+npm install ecf-dgii-react
+```
+
+Tu backend PHP envia el ECF y genera un token de lectura. El frontend usa ese token para hacer polling del estado, obtener el QR (`impresionUrl`) y el codigo de seguridad (`codSec`) directamente contra ECF SSD. Ver la seccion [Arquitectura Backend / Frontend](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii#arquitectura-backend--frontend) en la documentacion principal.
+
 ## Plugin WooCommerce
 
 Si usas WooCommerce, tenemos un plugin listo para facturacion electronica sin escribir codigo:
@@ -439,12 +453,15 @@ Este SDK es parte de una coleccion de SDKs oficiales para multiples plataformas:
 
 | Plataforma | Paquete | Instalacion |
 |-----------|---------|-------------|
-| .NET | [NuGet](https://www.nuget.org/packages/SSDDO.ECF_DGII.SDK) | `dotnet add package SSDDO.ECF_DGII.SDK` |
+| .NET | [![NuGet](https://img.shields.io/nuget/dt/SSDDO.ECF_DGII.SDK)](https://www.nuget.org/packages/SSDDO.ECF_DGII.SDK) | `dotnet add package SSDDO.ECF_DGII.SDK` |
 | TypeScript | [npm](https://www.npmjs.com/) | `npm install ecf-dgii-client` |
+| React | [npm](https://www.npmjs.com/) | `npm install ecf-dgii-react` |
 | Python | [PyPI](https://pypi.org/) | `pip install ecf-dgii-client` |
-| **PHP** | [Packagist](https://packagist.org/packages/ecfx/ecf-dgii-php) | `composer require ecfx/ecf-dgii-php` |
-| Java | [Maven Central](https://central.sonatype.com/) | Ver documentacion |
-| Kotlin | [Maven Central](https://central.sonatype.com/) | Ver documentacion |
+| **PHP** | [Packagist](https://packagist.org/) | `composer require ecfx/ecf-dgii-php` |
+| Java | [Maven Central](https://central.sonatype.com/) | Ver [java/README.md](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/java) |
+| Kotlin | [Maven Central](https://central.sonatype.com/) | Ver [kotlin/README.md](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/kotlin) |
+| iOS/Swift | [Swift Package Manager](https://swift.org/package-manager/) | Ver [ios/README.md](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/ios) |
+| C++ | [vcpkg](https://vcpkg.io/) / [Conan](https://conan.io/) | Ver [C++/README.md](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/C++) |
 | WooCommerce | [GitHub](https://github.com/SSD-Smart-Software-Development-SRL/ecf-ssd-woocomerce) | Plugin WordPress |
 
 ## Licencia
