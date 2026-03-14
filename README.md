@@ -27,6 +27,10 @@ Tu solo envias el comprobante en JSON a traves de este SDK, y el servicio se enc
 - Reintentar automaticamente en caso de fallos
 - Gestionar tus certificados digitales
 
+> **Usas WooCommerce?** Tenemos un [plugin listo para facturacion electronica](https://github.com/SSD-Smart-Software-Development-SRL/ecf-ssd-woocomerce) sin escribir codigo.
+>
+> **Buscas otro lenguaje?** Tambien disponible en [.NET](https://www.nuget.org/packages/SSDDO.ECF_DGII.SDK), [TypeScript](https://www.npmjs.com/), [React](https://www.npmjs.com/), [Python](https://pypi.org/), [Java](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/java), [Kotlin](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/kotlin), [Swift](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/ios) y [C++](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii/tree/main/C++). Ver [todos los SDKs y plugins](#otros-sdks-y-plugins).
+
 ## Instalacion
 
 ```bash

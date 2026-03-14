@@ -1,6 +1,5 @@
 {
     "name": "ecfx/ecf-dgii-php",
-    "version": "1.0.0",
     "description": "PHP SDK for the ECF DGII electronic fiscal receipt API (Dominican Republic)",
     "keywords": [
         "ecf",
