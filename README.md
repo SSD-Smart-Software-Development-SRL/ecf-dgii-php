@@ -412,13 +412,28 @@ openapi-generator generate \
 
 Los tests corren automaticamente via GitHub Actions en cada push y PR.
 
+## Documentacion del API
+
+La documentacion completa del API de ECF SSD esta disponible en:
+
+**[https://ecf.ssd.com.do/documentacion/api-ecf-ssd](https://ecf.ssd.com.do/documentacion/api-ecf-ssd)**
+
+Incluye referencia de todos los endpoints, schemas, codigos de error y ejemplos de request/response.
+
+## Plugin WooCommerce
+
+Si usas WooCommerce, tenemos un plugin listo para facturacion electronica sin escribir codigo:
+
+**[ECF SSD para WooCommerce](https://github.com/SSD-Smart-Software-Development-SRL/ecf-ssd-woocomerce)**
+
 ## Soporte
 
-- Documentacion: [https://ecf.ssd.com.do](https://ecf.ssd.com.do)
+- Documentacion API: [https://ecf.ssd.com.do/documentacion/api-ecf-ssd](https://ecf.ssd.com.do/documentacion/api-ecf-ssd)
+- Plataforma: [https://ecf.ssd.com.do](https://ecf.ssd.com.do)
 - Contacto: contacto@ssd.com.do
 - Issues: [GitHub Issues](https://github.com/SSD-Smart-Software-Development-SRL/ecf-dgii-php/issues)
 
-## Otros SDKs
+## Otros SDKs y Plugins
 
 Este SDK es parte de una coleccion de SDKs oficiales para multiples plataformas:
 
@@ -430,6 +445,7 @@ Este SDK es parte de una coleccion de SDKs oficiales para multiples plataformas:
 | **PHP** | [Packagist](https://packagist.org/packages/ecfx/ecf-dgii-php) | `composer require ecfx/ecf-dgii-php` |
 | Java | [Maven Central](https://central.sonatype.com/) | Ver documentacion |
 | Kotlin | [Maven Central](https://central.sonatype.com/) | Ver documentacion |
+| WooCommerce | [GitHub](https://github.com/SSD-Smart-Software-Development-SRL/ecf-ssd-woocomerce) | Plugin WordPress |
 
 ## Licencia
 
