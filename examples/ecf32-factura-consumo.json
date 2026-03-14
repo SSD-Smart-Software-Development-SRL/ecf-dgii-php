@@ -1,0 +1,44 @@
+{
+  "encabezado": {
+    "version": "Version1_0",
+    "idDoc": {
+      "tipoeCF": "FacturaDeConsumoElectronica",
+      "encf": "E320000000019",
+      "indicadorMontoGravado": "ConITBISIncluido",
+      "tipoIngresos": "01",
+      "tipoPago": "Contado",
+      "tablaFormasPago": [
+        { "formaPago": "Efectivo", "montoPago": 590 }
+      ]
+    },
+    "emisor": {
+      "rncEmisor": "TODO_YOUR_RNC",
+      "razonSocialEmisor": "TODO_YOUR_RAZON_SOCIAL",
+      "direccionEmisor": "TODO_YOUR_ADDRESS",
+      "numeroFacturaInterna": "21",
+      "fechaEmision": "2026-03-13"
+    },
+    "comprador": {},
+    "totales": {
+      "montoGravadoTotal": 500,
+      "montoGravadoI1": 500,
+      "itbiS1": 18,
+      "totalITBIS": 90,
+      "totalITBIS1": 90,
+      "montoTotal": 590,
+      "montoPeriodo": 590
+    }
+  },
+  "detallesItems": [
+    {
+      "numeroLinea": 1,
+      "indicadorFacturacion": "ITBIS1_18Percent",
+      "nombreItem": "Servicio Digital",
+      "indicadorBienoServicio": "Servicio",
+      "cantidadItem": 1,
+      "unidadMedida": "Unidad",
+      "precioUnitarioItem": 500,
+      "montoItem": 500
+    }
+  ]
+}
