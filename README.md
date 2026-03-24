@@ -424,19 +424,117 @@ La documentacion completa del API de ECF SSD esta disponible en:
 
 Incluye referencia de todos los endpoints, schemas, codigos de error y ejemplos de request/response.
 
-## Integracion con Frontend (TypeScript / React)
+## Arquitectura Backend / Frontend
 
-Si tu aplicacion PHP tiene un frontend en React o TypeScript, puedes usar los SDKs de frontend para consultar el estado de los comprobantes directamente desde el cliente, sin pasar por tu backend:
+```mermaid
+sequenceDiagram
+    participant C as Cliente (Browser/App)
+    participant BE as Backend
+    participant ECF as ECF API
 
-```bash
-# TypeScript / Node.js
-npm install ecf-dgii-client
+    C->>BE: POST /invoice (datos de factura)
+    Note over BE: Valida, guarda y convierte a formato ECF
 
-# React (incluye hooks y componentes)
-npm install ecf-dgii-react
+    BE->>ECF: POST /ecf/{tipo} (enviar ECF)
+    ECF-->>BE: { messageId }
+    BE-->>C: { messageId }
+
+    Note over C: No espera — puede continuar
+
+    alt Token en cache
+        C->>C: Usar token existente
+    else Sin token o expirado
+        C->>BE: GET /ecf-token
+        BE->>ECF: POST /apikey (solo lectura, scoped a RNC)
+        ECF-->>BE: { apiKey }
+        BE-->>C: { apiKey }
+        C->>C: Almacenar token en cache
+    end
+
+    loop Polling hasta completar
+        C->>ECF: GET /ecf/{rnc}/{encf} (token solo lectura)
+        ECF-->>C: { progress, codSec, ... }
+    end
 ```
 
-Tu backend PHP envia el ECF y genera un token de lectura. El frontend usa ese token para hacer polling del estado, obtener el QR (`impresionUrl`) y el codigo de seguridad (`codSec`) directamente contra ECF SSD. Ver la seccion [Arquitectura Backend / Frontend](https://github.com/SSD-Smart-Software-Development-SRL/ecf_dgii#arquitectura-backend--frontend) en la documentacion principal.
+### Flujo detallado
+
+1. El **cliente** (browser/app) envía los datos de la factura al **backend** (`POST /invoice`, `/order`, `/sale`)
+2. El **backend** valida, guarda y convierte la factura interna al formato ECF
+3. El **backend** envía el ECF a la API de ECF SSD (`POST /ecf/{tipo}`) y recibe un `messageId`
+4. El **backend** retorna el `messageId` al cliente — **el cliente no espera**, puede continuar
+5. Cuando el cliente necesita consultar el estado del ECF, usa `EcfFrontendClient` que internamente:
+   - Verifica si hay un **token de solo lectura** en cache
+   - Si **no existe o expiró**: llama a `getToken()` (que el consumidor provee — típicamente un `fetch('/ecf-token')` a su backend), luego llama a `cacheToken(token)` para almacenarlo
+   - Si la API retorna **401**: automáticamente llama a `getToken()` de nuevo, actualiza el cache, y reintenta
+6. El cliente hace **polling** directamente contra la API de ECF SSD (`GET /ecf/{rnc}/{encf}`) hasta que `progress` sea `Finished`
+
+### Ejemplo: Backend (PHP)
+
+```php
+use GuzzleHttp\Client;
+use Ecfx\EcfDgii\Configuration;
+use Ecfx\EcfDgii\Api\EcfApi;
+use Ecfx\EcfDgii\Api\ApiKeyApi;
+use Ecfx\EcfDgii\EcfService;
+
+$config = Configuration::getDefaultConfiguration()
+    ->setHost('https://api.prod.ecfx.ssd.com.do')
+    ->setAccessToken(getenv('ECF_DGII_TOKEN'));
+
+$client = new Client();
+$ecfApi = new EcfApi($client, $config);
+$service = new EcfService($ecfApi);
+
+// Endpoint de facturacion — tu logica de negocio + envio a ECF SSD
+// POST /api/v1/invoices
+$invoice = validateAndSave($request);
+$ecf = convertToEcf($invoice);
+$result = $service->sendEcf($ecf);
+// Retorna el messageId al cliente para que haga polling desde el frontend
+return json_encode(['messageId' => $result->getMessageId(), 'encf' => $result->getEncf()]);
+
+// Generar token de solo lectura para el cliente
+// GET /api/v1/ecf-token
+$apiKeyApi = new ApiKeyApi($client, $config);
+$apiKey = $apiKeyApi->createApiKey($rnc);
+return json_encode(['apiKey' => $apiKey->getToken()]);
+```
+
+### Ejemplo: Frontend (TypeScript con `EcfFrontendClient`)
+
+El cliente envía la factura al backend PHP, recibe el `messageId` y `encf`, y luego usa `EcfFrontendClient` para consultar el estado directamente contra la API de ECF SSD:
+
+```typescript
+import { createFrontendClient } from '@ssddo/ecf-sdk';
+
+const frontend = createFrontendClient({
+  getToken: async () => {
+    const res = await fetch('/api/v1/ecf-token');
+    const { apiKey } = await res.json();
+    return apiKey;
+  },
+  environment: 'prod',
+  // cacheToken y getCachedToken usan localStorage por defecto
+});
+
+// 1. Enviar factura al backend PHP
+const invoiceRes = await fetch('/api/v1/invoices', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(invoiceData),
+});
+const { messageId, encf } = await invoiceRes.json();
+
+// 2. Consultar estado del ECF directamente contra ECF SSD (solo lectura)
+const { data: ecf } = await frontend.queryEcf('131880681', encf);
+console.log(ecf.progress);    // 'Finished'
+console.log(ecf.codSec);      // Codigo de seguridad para imprimir
+console.log(ecf.impresionUrl); // URL para generar QR
+
+// 3. Buscar ECFs por RNC
+const { data: ecfs } = await frontend.searchEcfs('131880681');
+```
 
 ## Plugin WooCommerce
 
