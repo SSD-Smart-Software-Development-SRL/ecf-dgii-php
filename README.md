@@ -1,5 +1,9 @@
 # ECF DGII PHP SDK
 
+[![Packagist Version](https://img.shields.io/packagist/v/ecfx/ecf-dgii-php)](https://packagist.org/packages/ecfx/ecf-dgii-php)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/ecfx/ecf-dgii-php)](https://packagist.org/packages/ecfx/ecf-dgii-php)
+[![License](https://img.shields.io/packagist/l/ecfx/ecf-dgii-php)](LICENSE)
+
 <p align="center">
   <strong>PHP SDK para integrar la facturacion electronica (e-CF) en Republica Dominicana a traves de <a href="https://ecf.ssd.com.do">ECF SSD</a>.</strong>
 </p>
