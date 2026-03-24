@@ -32,10 +32,14 @@
         "friendsofphp/php-cs-fixer": "^3.5"
     },
     "autoload": {
-        "psr-4": { "Ecfx\\EcfDgii\\": "src/" }
+        "psr-4": {
+            "Ecfx\\EcfDgii\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "Ecfx\\EcfDgii\\Test\\": "test/" }
+        "psr-4": {
+            "Ecfx\\EcfDgii\\Test\\": "test/"
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true
