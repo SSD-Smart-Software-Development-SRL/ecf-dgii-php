@@ -43,10 +43,12 @@ composer require ecfx/ecf-dgii-php
 
 ### Requisitos
 
-- PHP 8.1+
+- PHP 8.2+ con el parche de seguridad de octubre 2026: 8.2.35, 8.3.36, 8.4.27 o 8.5.12 o superior (CVE-2026-109618 / CVE-2026-109619, "PHP2Shell")
 - ext-curl
 - ext-json
 - ext-mbstring
+
+> **Seguridad:** el SDK no incluye PHP, pero corre en tu servidor. Versiones de PHP sin el parche de octubre 2026 permiten ejecucion remota de codigo sin autenticacion. PHP 8.1 y anteriores ya no reciben parches oficiales; actualiza a 8.2 o superior.
 
 ## Como Empezar
 

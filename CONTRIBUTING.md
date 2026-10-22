@@ -19,7 +19,7 @@ Abre un issue con la plantilla de feature request describiendo el problema que q
 
 ### Requisitos
 
-- PHP 8.1+
+- PHP 8.2+
 - Composer
 
 ### Setup
