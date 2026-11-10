@@ -57,7 +57,7 @@ class Ecf31DescuentoORecargo implements ModelInterface, ArrayAccess, \JsonSerial
       * @var string[]
       */
     protected static $openAPITypes = [
-        'numero_linea' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'numero_linea' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'tipo_ajuste' => '\Ecfx\EcfDgii\Model\Ecf31TipoAjusteType',
         'indicador_norma1007' => '\Ecfx\EcfDgii\Model\IndicadorNorma1007Type',
         'descripcion_descuentoo_recargo' => 'string',
@@ -354,7 +354,7 @@ class Ecf31DescuentoORecargo implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets numero_linea
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner
      */
     public function getNumeroLinea()
     {
@@ -364,7 +364,7 @@ class Ecf31DescuentoORecargo implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets numero_linea
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress $numero_linea numero_linea
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner $numero_linea numero_linea
      *
      * @return self
      */

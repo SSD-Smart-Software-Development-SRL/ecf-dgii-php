@@ -155,12 +155,15 @@ class DgiiApi
     /**
      * Operation consultaDirectorioListado
      *
+     * [OBSOLETO] Listado completo del Directorio de la DGII
+     *
      * @param  string $rnc rnc (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['consultaDirectorioListado'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\Directorio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\Directorio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @deprecated
      */
     public function consultaDirectorioListado($rnc, string $contentType = self::contentTypes['consultaDirectorioListado'][0])
     {
@@ -171,12 +174,15 @@ class DgiiApi
     /**
      * Operation consultaDirectorioListadoWithHttpInfo
      *
+     * [OBSOLETO] Listado completo del Directorio de la DGII
+     *
      * @param  string $rnc (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['consultaDirectorioListado'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\Directorio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\Directorio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @deprecated
      */
     public function consultaDirectorioListadoWithHttpInfo($rnc, string $contentType = self::contentTypes['consultaDirectorioListado'][0])
     {
@@ -231,6 +237,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -300,6 +312,14 @@ class DgiiApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
 
@@ -310,11 +330,14 @@ class DgiiApi
     /**
      * Operation consultaDirectorioListadoAsync
      *
+     * [OBSOLETO] Listado completo del Directorio de la DGII
+     *
      * @param  string $rnc (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['consultaDirectorioListado'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
+     * @deprecated
      */
     public function consultaDirectorioListadoAsync($rnc, string $contentType = self::contentTypes['consultaDirectorioListado'][0])
     {
@@ -329,11 +352,14 @@ class DgiiApi
     /**
      * Operation consultaDirectorioListadoAsyncWithHttpInfo
      *
+     * [OBSOLETO] Listado completo del Directorio de la DGII
+     *
      * @param  string $rnc (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['consultaDirectorioListado'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
+     * @deprecated
      */
     public function consultaDirectorioListadoAsyncWithHttpInfo($rnc, string $contentType = self::contentTypes['consultaDirectorioListado'][0])
     {
@@ -384,6 +410,7 @@ class DgiiApi
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
+     * @deprecated
      */
     public function consultaDirectorioListadoRequest($rnc, string $contentType = self::contentTypes['consultaDirectorioListado'][0])
     {
@@ -481,7 +508,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\Directorio|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\Directorio|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaDirectorioObtenerDirectorioPorRnc($rnc, $rnc2, string $contentType = self::contentTypes['consultaDirectorioObtenerDirectorioPorRnc'][0])
     {
@@ -498,7 +525,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\Directorio|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\Directorio|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaDirectorioObtenerDirectorioPorRncWithHttpInfo($rnc, $rnc2, string $contentType = self::contentTypes['consultaDirectorioObtenerDirectorioPorRnc'][0])
     {
@@ -553,6 +580,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -615,6 +648,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -825,7 +866,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaEstado|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaEstado|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaEstado($rnc, $rnc_emisor, $ncf_electronico, $rnc_comprador, $codigo_seguridad, string $contentType = self::contentTypes['consultaEstado'][0])
     {
@@ -845,7 +886,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaEstado|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaEstado|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaEstadoWithHttpInfo($rnc, $rnc_emisor, $ncf_electronico, $rnc_comprador, $codigo_seguridad, string $contentType = self::contentTypes['consultaEstado'][0])
     {
@@ -900,6 +941,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -962,6 +1009,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -1228,7 +1283,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaRFCE|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaRFCE|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaRFCE($rnc, $rnc_emisor, $encf, $cod_seguridad_e_cf, string $contentType = self::contentTypes['consultaRFCE'][0])
     {
@@ -1247,7 +1302,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaRFCE|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaRFCE|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaRFCEWithHttpInfo($rnc, $rnc_emisor, $encf, $cod_seguridad_e_cf, string $contentType = self::contentTypes['consultaRFCE'][0])
     {
@@ -1302,6 +1357,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -1364,6 +1425,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -1609,7 +1678,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaResultado($rnc, $track_id, string $contentType = self::contentTypes['consultaResultado'][0])
     {
@@ -1626,7 +1695,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaResultadoWithHttpInfo($rnc, $track_id, string $contentType = self::contentTypes['consultaResultado'][0])
     {
@@ -1681,6 +1750,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -1743,6 +1818,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -1953,7 +2036,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaTimbre($rnc, $rncemisor, $encf, $montototal, $codigoseguridad, string $contentType = self::contentTypes['consultaTimbre'][0])
     {
@@ -1973,7 +2056,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaTimbreWithHttpInfo($rnc, $rncemisor, $encf, $montototal, $codigoseguridad, string $contentType = self::contentTypes['consultaTimbre'][0])
     {
@@ -2028,6 +2111,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2090,6 +2179,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -2357,7 +2454,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaTimbreFC($rnc, $rncemisor, $encf, $montototal, $codigoseguridad, string $contentType = self::contentTypes['consultaTimbreFC'][0])
     {
@@ -2377,7 +2474,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTimbre|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaTimbreFCWithHttpInfo($rnc, $rncemisor, $encf, $montototal, $codigoseguridad, string $contentType = self::contentTypes['consultaTimbreFC'][0])
     {
@@ -2432,6 +2529,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2494,6 +2597,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -2759,7 +2870,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\TrackingDetalle[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function consultaTrackId($rnc, $rnc_emisor, $encf, string $contentType = self::contentTypes['consultaTrackId'][0])
     {
@@ -2777,7 +2888,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\TrackingDetalle[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function consultaTrackIdWithHttpInfo($rnc, $rnc_emisor, $encf, string $contentType = self::contentTypes['consultaTrackId'][0])
     {
@@ -2809,7 +2920,7 @@ class DgiiApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Ecfx\EcfDgii\Model\RespuestaConsultaTrackId',
+                        '\Ecfx\EcfDgii\Model\TrackingDetalle[]',
                         $request,
                         $response,
                     );
@@ -2832,6 +2943,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2855,7 +2972,7 @@ class DgiiApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Ecfx\EcfDgii\Model\RespuestaConsultaTrackId',
+                '\Ecfx\EcfDgii\Model\TrackingDetalle[]',
                 $request,
                 $response,
             );
@@ -2864,7 +2981,7 @@ class DgiiApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\RespuestaConsultaTrackId',
+                        '\Ecfx\EcfDgii\Model\TrackingDetalle[]',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2894,6 +3011,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -2942,7 +3067,7 @@ class DgiiApi
      */
     public function consultaTrackIdAsyncWithHttpInfo($rnc, $rnc_emisor, $encf, string $contentType = self::contentTypes['consultaTrackId'][0])
     {
-        $returnType = '\Ecfx\EcfDgii\Model\RespuestaConsultaTrackId';
+        $returnType = '\Ecfx\EcfDgii\Model\TrackingDetalle[]';
         $request = $this->consultaTrackIdRequest($rnc, $rnc_emisor, $encf, $contentType);
 
         return $this->client
@@ -3119,7 +3244,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaEstatusServicio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaEstatusServicio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function estatusServiciosObtenerEstatus($rnc, string $contentType = self::contentTypes['estatusServiciosObtenerEstatus'][0])
     {
@@ -3135,7 +3260,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaEstatusServicio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaEstatusServicio[]|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function estatusServiciosObtenerEstatusWithHttpInfo($rnc, string $contentType = self::contentTypes['estatusServiciosObtenerEstatus'][0])
     {
@@ -3190,6 +3315,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -3252,6 +3383,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
@@ -3439,7 +3578,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\RespuestaVentanaDeMantenimiento|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\RespuestaVentanaDeMantenimiento|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
     public function estatusServiciosObtenerVentanasMantenimiento($rnc, string $contentType = self::contentTypes['estatusServiciosObtenerVentanasMantenimiento'][0])
     {
@@ -3455,7 +3594,7 @@ class DgiiApi
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\RespuestaVentanaDeMantenimiento|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\RespuestaVentanaDeMantenimiento|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
     public function estatusServiciosObtenerVentanasMantenimientoWithHttpInfo($rnc, string $contentType = self::contentTypes['estatusServiciosObtenerVentanasMantenimiento'][0])
     {
@@ -3510,6 +3649,12 @@ class DgiiApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -3572,6 +3717,14 @@ class DgiiApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Ecfx\EcfDgii\Model\ProblemDetails',

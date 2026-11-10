@@ -57,7 +57,7 @@ class AnulacionRequest implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'cantida_de_ncf_anulados' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'cantida_de_ncf_anulados' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'detalle_anulacion' => '\Ecfx\EcfDgii\Model\DetalleAnulacionRequest[]'
     ];
 
@@ -305,7 +305,7 @@ class AnulacionRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets cantida_de_ncf_anulados
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner
      */
     public function getCantidaDeNcfAnulados()
     {
@@ -315,7 +315,7 @@ class AnulacionRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets cantida_de_ncf_anulados
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress $cantida_de_ncf_anulados cantida_de_ncf_anulados
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner $cantida_de_ncf_anulados cantida_de_ncf_anulados
      *
      * @return self
      */

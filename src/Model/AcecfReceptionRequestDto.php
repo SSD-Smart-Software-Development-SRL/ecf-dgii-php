@@ -61,7 +61,7 @@ class AcecfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSeri
         'tenant_id' => 'string',
         'company_rnc' => 'string',
         'file_name' => 'string',
-        'progress' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'progress' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'created_on' => '\DateTime',
         'updated_on' => '\DateTime',
         'error_message' => 'string',
@@ -463,7 +463,7 @@ class AcecfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Gets progress
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getProgress()
     {
@@ -473,7 +473,7 @@ class AcecfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSeri
     /**
      * Sets progress
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $progress progress
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $progress progress
      *
      * @return self
      */

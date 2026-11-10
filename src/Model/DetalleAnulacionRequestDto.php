@@ -58,8 +58,8 @@ class DetalleAnulacionRequestDto implements ModelInterface, ArrayAccess, \JsonSe
       */
     protected static $openAPITypes = [
         'tipo_ecf' => '\Ecfx\EcfDgii\Model\ECFType',
-        'cantidade_ncf_anulados' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
-        'no_linea' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress[]',
+        'cantidade_ncf_anulados' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
+        'no_linea' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner[]',
         'secuencias' => '\Ecfx\EcfDgii\Model\SecuenciaRequestDto[]'
     ];
 
@@ -340,7 +340,7 @@ class DetalleAnulacionRequestDto implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets cantidade_ncf_anulados
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getCantidadeNcfAnulados()
     {
@@ -350,7 +350,7 @@ class DetalleAnulacionRequestDto implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets cantidade_ncf_anulados
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $cantidade_ncf_anulados cantidade_ncf_anulados
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $cantidade_ncf_anulados cantidade_ncf_anulados
      *
      * @return self
      */
@@ -367,7 +367,7 @@ class DetalleAnulacionRequestDto implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Gets no_linea
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress[]|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner[]|null
      */
     public function getNoLinea()
     {
@@ -377,7 +377,7 @@ class DetalleAnulacionRequestDto implements ModelInterface, ArrayAccess, \JsonSe
     /**
      * Sets no_linea
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress[]|null $no_linea no_linea
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner[]|null $no_linea no_linea
      *
      * @return self
      */

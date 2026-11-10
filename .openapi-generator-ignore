@@ -21,3 +21,19 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+# --- Hand-maintained files (do not let regeneration overwrite them) ---
+# README, composer.json and .gitignore are written by hand.
+README.md
+composer.json
+.gitignore
+.travis.yml
+git_push.sh
+# Configuration.php: booleans go in the query string as "true"/"false"
+# (BOOLEAN_FORMAT_STRING); ASP.NET Core does not bind 1/0 to bool.
+src/Configuration.php
+# ObjectSerializer.php: unknown enum values from the API are passed through
+# as raw strings instead of throwing (forward compatibility with new values).
+src/ObjectSerializer.php
+# Generated test stubs are incomplete placeholders; real tests live in tests/.
+test/**

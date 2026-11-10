@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **tenant_id** | **string** |  | [optional]
 **company_rnc** | **string** |  | [optional]
 **file_name** | **string** |  | [optional]
-**progress** | [**\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress**](AcecfReceptionRequestDtoProgress.md) |  | [optional]
+**progress** | [**\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner**](SearchEcfReceptionRequestsTiposEcfsParameterInner.md) |  | [optional]
 **created_on** | **\DateTime** |  | [optional]
 **updated_on** | **\DateTime** |  | [optional]
 **error_message** | **string** |  | [optional]

@@ -74,7 +74,7 @@ void (empty response body)
 ## `getCompanies()`
 
 ```php
-getCompanies($rncs, $names, $page, $limit): \Ecfx\EcfDgii\Model\PaginatedApiResultOfCompanyResponse
+getCompanies($rncs, $names, $page, $limit, $search): \Ecfx\EcfDgii\Model\PaginatedApiResultOfCompanyResponse
 ```
 
 
@@ -100,9 +100,10 @@ $rncs = array('rncs_example'); // string[]
 $names = array('names_example'); // string[]
 $page = new \Ecfx\EcfDgii\Model\\Ecfx\EcfDgii\Model\GetCompaniesPageParameter(); // \Ecfx\EcfDgii\Model\GetCompaniesPageParameter
 $limit = new \Ecfx\EcfDgii\Model\\Ecfx\EcfDgii\Model\GetCompaniesLimitParameter(); // \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter
+$search = 'search_example'; // string
 
 try {
-    $result = $apiInstance->getCompanies($rncs, $names, $page, $limit);
+    $result = $apiInstance->getCompanies($rncs, $names, $page, $limit, $search);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CompanyApi->getCompanies: ', $e->getMessage(), PHP_EOL;
@@ -117,6 +118,7 @@ try {
 | **names** | [**string[]**](../Model/string.md)|  | [optional] |
 | **page** | **\Ecfx\EcfDgii\Model\GetCompaniesPageParameter**|  | [optional] [default to 1] |
 | **limit** | **\Ecfx\EcfDgii\Model\GetCompaniesLimitParameter**|  | [optional] [default to 25] |
+| **search** | **string**|  | [optional] |
 
 ### Return type
 

@@ -59,9 +59,9 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     protected static $openAPITypes = [
         'next_page_uri' => 'string',
         'values' => '\Ecfx\EcfDgii\Model\AnulacionListResponse[]',
-        'total' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
-        'page' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
-        'limit' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'total' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
+        'page' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
+        'limit' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'next_page' => '\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas',
         'previous_page' => '\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas'
     ];
@@ -398,7 +398,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Gets total
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getTotal()
     {
@@ -408,7 +408,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Sets total
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $total total
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $total total
      *
      * @return self
      */
@@ -425,7 +425,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Gets page
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getPage()
     {
@@ -435,7 +435,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Sets page
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $page page
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $page page
      *
      * @return self
      */
@@ -452,7 +452,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Gets limit
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getLimit()
     {
@@ -462,7 +462,7 @@ class PaginatedApiResultOfAnulacionListResponse implements ModelInterface, Array
     /**
      * Sets limit
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $limit limit
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $limit limit
      *
      * @return self
      */

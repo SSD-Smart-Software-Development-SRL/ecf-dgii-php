@@ -63,7 +63,7 @@ class Ecf33IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
         'indicador_envio_diferido' => '\Ecfx\EcfDgii\Model\IndicadorEnvioDiferidoType',
         'indicador_monto_gravado' => '\Ecfx\EcfDgii\Model\IndicadorMontoGravadoType',
         'indicador_servicio_todo_incluido' => '\Ecfx\EcfDgii\Model\IndicadorServicioTodoIncluidoType',
-        'tipo_ingresos' => '\Ecfx\EcfDgii\Model\Ecf33TipoIngresosValidationType',
+        'tipo_ingresos' => '\Ecfx\EcfDgii\Model\TipoIngresosValidationType',
         'tipo_pago' => '\Ecfx\EcfDgii\Model\Ecf33TipoPagoType',
         'fecha_limite_pago' => '\DateTime',
         'termino_pago' => 'string',
@@ -115,7 +115,7 @@ class Ecf33IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
         'indicador_envio_diferido' => true,
         'indicador_monto_gravado' => true,
         'indicador_servicio_todo_incluido' => true,
-        'tipo_ingresos' => false,
+        'tipo_ingresos' => true,
         'tipo_pago' => false,
         'fecha_limite_pago' => true,
         'termino_pago' => true,
@@ -392,9 +392,6 @@ class Ecf33IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['encf'] === null) {
             $invalidProperties[] = "'encf' can't be null";
         }
-        if ($this->container['tipo_ingresos'] === null) {
-            $invalidProperties[] = "'tipo_ingresos' can't be null";
-        }
         if ($this->container['tipo_pago'] === null) {
             $invalidProperties[] = "'tipo_pago' can't be null";
         }
@@ -599,7 +596,7 @@ class Ecf33IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets tipo_ingresos
      *
-     * @return \Ecfx\EcfDgii\Model\Ecf33TipoIngresosValidationType
+     * @return \Ecfx\EcfDgii\Model\TipoIngresosValidationType|null
      */
     public function getTipoIngresos()
     {
@@ -609,14 +606,21 @@ class Ecf33IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets tipo_ingresos
      *
-     * @param \Ecfx\EcfDgii\Model\Ecf33TipoIngresosValidationType $tipo_ingresos tipo_ingresos
+     * @param \Ecfx\EcfDgii\Model\TipoIngresosValidationType|null $tipo_ingresos tipo_ingresos
      *
      * @return self
      */
     public function setTipoIngresos($tipo_ingresos)
     {
         if (is_null($tipo_ingresos)) {
-            throw new \InvalidArgumentException('non-nullable tipo_ingresos cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'tipo_ingresos');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('tipo_ingresos', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['tipo_ingresos'] = $tipo_ingresos;
 

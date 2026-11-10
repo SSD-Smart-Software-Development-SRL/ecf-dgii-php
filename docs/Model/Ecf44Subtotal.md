@@ -1,0 +1,15 @@
+# # Ecf44Subtotal
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**numero_sub_total** | [**\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas**](Ecf31IdDocTotalPaginas.md) |  | [optional]
+**descripcion_subtotal** | **string** |  | [optional]
+**orden** | [**\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas**](Ecf31IdDocTotalPaginas.md) |  | [optional]
+**sub_total_impuesto_adicional** | [**\Ecfx\EcfDgii\Model\Ecf31DescuentoORecargoMontoDescuentooRecargo**](Ecf31DescuentoORecargoMontoDescuentooRecargo.md) |  | [optional]
+**sub_total_exento** | [**\Ecfx\EcfDgii\Model\Ecf31DescuentoORecargoMontoDescuentooRecargo**](Ecf31DescuentoORecargoMontoDescuentooRecargo.md) |  | [optional]
+**monto_sub_total** | [**\Ecfx\EcfDgii\Model\Ecf31DescuentoORecargoMontoDescuentooRecargo**](Ecf31DescuentoORecargoMontoDescuentooRecargo.md) |  | [optional]
+**lineas** | [**\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas**](Ecf31IdDocTotalPaginas.md) |  | [optional]
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

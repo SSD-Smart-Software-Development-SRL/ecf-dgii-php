@@ -73,6 +73,8 @@ class EcfFrontendClient
      * @param mixed      $amountTo          Filter by maximum amount
      * @param int        $page              Page number
      * @param int        $limit             Page size
+     * @param array|null $progresses        Filter by processing progress (EcfProgress values)
+     * @param array|null $dgiiEstados       Filter by DGII status (EcfEstado values)
      * @return PaginatedApiResultOfEcfResponse
      * @throws ApiException
      */
@@ -88,10 +90,23 @@ class EcfFrontendClient
         mixed $amountTo = null,
         int $page = 1,
         int $limit = 25,
+        ?array $progresses = null,
+        ?array $dgiiEstados = null,
     ): PaginatedApiResultOfEcfResponse {
         return $this->ecfApi->searchEcfs(
-            $rnc, $encfs, $ids, $tiposEcfs, $includeEcfContent,
-            $fromFechaEmision, $toFechaEmision, $amountFrom, $amountTo, $page, $limit
+            rnc: $rnc,
+            encfs: $encfs,
+            ids: $ids,
+            tipos_ecfs: $tiposEcfs,
+            include_ecf_content: $includeEcfContent,
+            from_fecha_emision: $fromFechaEmision,
+            to_fecha_emision: $toFechaEmision,
+            amount_from: $amountFrom,
+            amount_to: $amountTo,
+            progresses: $progresses,
+            dgii_estados: $dgiiEstados,
+            page: $page,
+            limit: $limit,
         );
     }
 
@@ -108,6 +123,8 @@ class EcfFrontendClient
      * @param mixed       $amountTo          Filter by maximum amount
      * @param int         $page              Page number
      * @param int         $limit             Page size
+     * @param array|null  $progresses        Filter by processing progress (EcfProgress values)
+     * @param array|null  $dgiiEstados       Filter by DGII status (EcfEstado values)
      * @return PaginatedApiResultOfEcfResponse
      * @throws ApiException
      */
@@ -122,10 +139,22 @@ class EcfFrontendClient
         mixed $amountTo = null,
         int $page = 1,
         int $limit = 25,
+        ?array $progresses = null,
+        ?array $dgiiEstados = null,
     ): PaginatedApiResultOfEcfResponse {
         return $this->ecfApi->searchAllEcfs(
-            $encfs, $ids, $tiposEcfs, $includeEcfContent,
-            $fromFechaEmision, $toFechaEmision, $amountFrom, $amountTo, $page, $limit
+            encfs: $encfs,
+            ids: $ids,
+            tipos_ecfs: $tiposEcfs,
+            include_ecf_content: $includeEcfContent,
+            from_fecha_emision: $fromFechaEmision,
+            to_fecha_emision: $toFechaEmision,
+            amount_from: $amountFrom,
+            amount_to: $amountTo,
+            progresses: $progresses,
+            dgii_estados: $dgiiEstados,
+            page: $page,
+            limit: $limit,
         );
     }
 
@@ -154,6 +183,7 @@ class EcfFrontendClient
      * @param array|null $names Filter by names
      * @param int        $page  Page number
      * @param int        $limit Page size
+     * @param string|null $search Free-text search: part of a name, legal name or RNC
      * @return PaginatedApiResultOfCompanyResponse
      * @throws ApiException
      */
@@ -162,8 +192,15 @@ class EcfFrontendClient
         ?array $names = null,
         int $page = 1,
         int $limit = 25,
+        ?string $search = null,
     ): PaginatedApiResultOfCompanyResponse {
-        return $this->companyApi->getCompanies($rncs, $names, $page, $limit);
+        return $this->companyApi->getCompanies(
+            rncs: $rncs,
+            names: $names,
+            page: $page,
+            limit: $limit,
+            search: $search,
+        );
     }
 
     /**

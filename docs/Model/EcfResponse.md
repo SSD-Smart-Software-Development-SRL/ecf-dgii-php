@@ -26,6 +26,9 @@ Name | Type | Description | Notes
 **emisor_receptor_errors** | **string** |  |
 **secuencia_utilizada** | **bool** |  |
 **dgii_environment** | [**\Ecfx\EcfDgii\Model\DGIIEnvironment**](DGIIEnvironment.md) |  |
+**acecfs** | [**\Ecfx\EcfDgii\Model\AcecfSummaryDto[]**](AcecfSummaryDto.md) | ACECFs received from the receptor for this outbound ECF. | [optional]
+**receptor_directory_status** | [**\Ecfx\EcfDgii\Model\ReceptorDirectoryStatus**](ReceptorDirectoryStatus.md) |  | [optional]
+**dgii_submission_state** | [**\Ecfx\EcfDgii\Model\DgiiSubmissionState**](DgiiSubmissionState.md) | Where the DGII transmission of this ECF stands. Null for documents created before durable submission. &#x60;PendingReconciliation&#x60;: DGII&#39;s answer is not confirmed yet; do not resend or reuse the eNCF. &#x60;NotReceived&#x60;: DGII confirmed it has no record of the document (Progress is Error, Estatus is null and SecuenciaUtilizada is false); the same eNCF may be submitted again as a new request. | [optional]
 **impresion_url** | **string** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
