@@ -97,7 +97,7 @@ class RespuestaConsultaTrackId implements ModelInterface, ArrayAccess, \JsonSeri
         'estado' => true,
         'rnc' => true,
         'encf' => true,
-        'secuencia_utilizada' => false,
+        'secuencia_utilizada' => true,
         'fecha_recepcion' => true,
         'mensajes' => true
     ];
@@ -529,7 +529,14 @@ class RespuestaConsultaTrackId implements ModelInterface, ArrayAccess, \JsonSeri
     public function setSecuenciaUtilizada($secuencia_utilizada)
     {
         if (is_null($secuencia_utilizada)) {
-            throw new \InvalidArgumentException('non-nullable secuencia_utilizada cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'secuencia_utilizada');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('secuencia_utilizada', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['secuencia_utilizada'] = $secuencia_utilizada;
 

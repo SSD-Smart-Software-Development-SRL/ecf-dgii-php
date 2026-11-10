@@ -74,6 +74,8 @@ class TipoMonedaType
 
     public const MXN = 'MXN';
 
+    public const COP = 'COP';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -96,7 +98,8 @@ class TipoMonedaType
             self::USD,
             self::VEF,
             self::HTG,
-            self::MXN
+            self::MXN,
+            self::COP
         ];
     }
 }

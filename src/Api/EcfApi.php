@@ -77,9 +77,6 @@ class EcfApi
         'anulacionRangos' => [
             'application/json',
         ],
-        'aprobacionComercial' => [
-            'application/json',
-        ],
         'firmarSemilla' => [
             'multipart/form-data',
         ],
@@ -464,299 +461,6 @@ class EcfApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($anulacion_request));
             } else {
                 $httpBody = $anulacion_request;
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer (JWT) authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation aprobacionComercial
-     *
-     * @param  string $rnc rnc (required)
-     * @param  string $encf encf (required)
-     * @param  \Ecfx\EcfDgii\Model\SendAcecfRequest $send_acecf_request send_acecf_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['aprobacionComercial'] to see the possible values for this operation
-     *
-     * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return void
-     */
-    public function aprobacionComercial($rnc, $encf, $send_acecf_request, string $contentType = self::contentTypes['aprobacionComercial'][0])
-    {
-        $this->aprobacionComercialWithHttpInfo($rnc, $encf, $send_acecf_request, $contentType);
-    }
-
-    /**
-     * Operation aprobacionComercialWithHttpInfo
-     *
-     * @param  string $rnc (required)
-     * @param  string $encf (required)
-     * @param  \Ecfx\EcfDgii\Model\SendAcecfRequest $send_acecf_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['aprobacionComercial'] to see the possible values for this operation
-     *
-     * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function aprobacionComercialWithHttpInfo($rnc, $encf, $send_acecf_request, string $contentType = self::contentTypes['aprobacionComercial'][0])
-    {
-        $request = $this->aprobacionComercialRequest($rnc, $encf, $send_acecf_request, $contentType);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            return [null, $statusCode, $response->getHeaders()];
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\ProblemDetails',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\ProblemDetails',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\ProblemDetails',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\ProblemDetails',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 500:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Ecfx\EcfDgii\Model\ProblemDetails',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation aprobacionComercialAsync
-     *
-     * @param  string $rnc (required)
-     * @param  string $encf (required)
-     * @param  \Ecfx\EcfDgii\Model\SendAcecfRequest $send_acecf_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['aprobacionComercial'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function aprobacionComercialAsync($rnc, $encf, $send_acecf_request, string $contentType = self::contentTypes['aprobacionComercial'][0])
-    {
-        return $this->aprobacionComercialAsyncWithHttpInfo($rnc, $encf, $send_acecf_request, $contentType)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation aprobacionComercialAsyncWithHttpInfo
-     *
-     * @param  string $rnc (required)
-     * @param  string $encf (required)
-     * @param  \Ecfx\EcfDgii\Model\SendAcecfRequest $send_acecf_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['aprobacionComercial'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function aprobacionComercialAsyncWithHttpInfo($rnc, $encf, $send_acecf_request, string $contentType = self::contentTypes['aprobacionComercial'][0])
-    {
-        $returnType = '';
-        $request = $this->aprobacionComercialRequest($rnc, $encf, $send_acecf_request, $contentType);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'aprobacionComercial'
-     *
-     * @param  string $rnc (required)
-     * @param  string $encf (required)
-     * @param  \Ecfx\EcfDgii\Model\SendAcecfRequest $send_acecf_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['aprobacionComercial'] to see the possible values for this operation
-     *
-     * @throws \InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function aprobacionComercialRequest($rnc, $encf, $send_acecf_request, string $contentType = self::contentTypes['aprobacionComercial'][0])
-    {
-
-        // verify the required parameter 'rnc' is set
-        if ($rnc === null || (is_array($rnc) && count($rnc) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $rnc when calling aprobacionComercial'
-            );
-        }
-
-        // verify the required parameter 'encf' is set
-        if ($encf === null || (is_array($encf) && count($encf) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $encf when calling aprobacionComercial'
-            );
-        }
-
-        // verify the required parameter 'send_acecf_request' is set
-        if ($send_acecf_request === null || (is_array($send_acecf_request) && count($send_acecf_request) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $send_acecf_request when calling aprobacionComercial'
-            );
-        }
-
-
-        $resourcePath = '/ecf/aprobacioncomercial/{rnc}/{encf}';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-        // path params
-        if ($rnc !== null) {
-            $resourcePath = str_replace(
-                '{' . 'rnc' . '}',
-                ObjectSerializer::toPathValue($rnc),
-                $resourcePath
-            );
-        }
-        // path params
-        if ($encf !== null) {
-            $resourcePath = str_replace(
-                '{' . 'encf' . '}',
-                ObjectSerializer::toPathValue($encf),
-                $resourcePath
-            );
-        }
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/problem+json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (isset($send_acecf_request)) {
-            if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($send_acecf_request));
-            } else {
-                $httpBody = $send_acecf_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -2125,32 +1829,32 @@ class EcfApi
     /**
      * Operation recepcionEcf31
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf31ECF $ecf31_ecf ecf31_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf31'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf31($ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
+    public function recepcionEcf31($ecf31_ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
     {
-        list($response) = $this->recepcionEcf31WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf31WithHttpInfo($ecf31_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf31WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf31ECF $ecf31_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf31'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf31WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
+    public function recepcionEcf31WithHttpInfo($ecf31_ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
     {
-        $request = $this->recepcionEcf31Request($ecf, $contentType);
+        $request = $this->recepcionEcf31Request($ecf31_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2195,6 +1899,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2262,6 +1972,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2280,15 +1998,15 @@ class EcfApi
     /**
      * Operation recepcionEcf31Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf31ECF $ecf31_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf31'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf31Async($ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
+    public function recepcionEcf31Async($ecf31_ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
     {
-        return $this->recepcionEcf31AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf31AsyncWithHttpInfo($ecf31_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2299,16 +2017,16 @@ class EcfApi
     /**
      * Operation recepcionEcf31AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf31ECF $ecf31_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf31'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf31AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
+    public function recepcionEcf31AsyncWithHttpInfo($ecf31_ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf31Request($ecf, $contentType);
+        $request = $this->recepcionEcf31Request($ecf31_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2349,19 +2067,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf31'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf31ECF $ecf31_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf31'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf31Request($ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
+    public function recepcionEcf31Request($ecf31_ecf, string $contentType = self::contentTypes['recepcionEcf31'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf31_ecf' is set
+        if ($ecf31_ecf === null || (is_array($ecf31_ecf) && count($ecf31_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf31'
+                'Missing the required parameter $ecf31_ecf when calling recepcionEcf31'
             );
         }
 
@@ -2384,12 +2102,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf31_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf31_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf31_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -2444,32 +2162,32 @@ class EcfApi
     /**
      * Operation recepcionEcf32
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf32ECF $ecf32_ecf ecf32_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf32'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf32($ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
+    public function recepcionEcf32($ecf32_ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
     {
-        list($response) = $this->recepcionEcf32WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf32WithHttpInfo($ecf32_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf32WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf32ECF $ecf32_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf32'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf32WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
+    public function recepcionEcf32WithHttpInfo($ecf32_ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
     {
-        $request = $this->recepcionEcf32Request($ecf, $contentType);
+        $request = $this->recepcionEcf32Request($ecf32_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2514,6 +2232,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2581,6 +2305,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2599,15 +2331,15 @@ class EcfApi
     /**
      * Operation recepcionEcf32Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf32ECF $ecf32_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf32'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf32Async($ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
+    public function recepcionEcf32Async($ecf32_ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
     {
-        return $this->recepcionEcf32AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf32AsyncWithHttpInfo($ecf32_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2618,16 +2350,16 @@ class EcfApi
     /**
      * Operation recepcionEcf32AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf32ECF $ecf32_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf32'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf32AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
+    public function recepcionEcf32AsyncWithHttpInfo($ecf32_ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf32Request($ecf, $contentType);
+        $request = $this->recepcionEcf32Request($ecf32_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2668,19 +2400,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf32'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf32ECF $ecf32_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf32'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf32Request($ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
+    public function recepcionEcf32Request($ecf32_ecf, string $contentType = self::contentTypes['recepcionEcf32'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf32_ecf' is set
+        if ($ecf32_ecf === null || (is_array($ecf32_ecf) && count($ecf32_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf32'
+                'Missing the required parameter $ecf32_ecf when calling recepcionEcf32'
             );
         }
 
@@ -2703,12 +2435,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf32_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf32_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf32_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -2763,32 +2495,32 @@ class EcfApi
     /**
      * Operation recepcionEcf33
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf33ECF $ecf33_ecf ecf33_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf33'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf33($ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
+    public function recepcionEcf33($ecf33_ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
     {
-        list($response) = $this->recepcionEcf33WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf33WithHttpInfo($ecf33_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf33WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf33ECF $ecf33_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf33'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf33WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
+    public function recepcionEcf33WithHttpInfo($ecf33_ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
     {
-        $request = $this->recepcionEcf33Request($ecf, $contentType);
+        $request = $this->recepcionEcf33Request($ecf33_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2833,6 +2565,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -2900,6 +2638,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2918,15 +2664,15 @@ class EcfApi
     /**
      * Operation recepcionEcf33Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf33ECF $ecf33_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf33'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf33Async($ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
+    public function recepcionEcf33Async($ecf33_ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
     {
-        return $this->recepcionEcf33AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf33AsyncWithHttpInfo($ecf33_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2937,16 +2683,16 @@ class EcfApi
     /**
      * Operation recepcionEcf33AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf33ECF $ecf33_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf33'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf33AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
+    public function recepcionEcf33AsyncWithHttpInfo($ecf33_ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf33Request($ecf, $contentType);
+        $request = $this->recepcionEcf33Request($ecf33_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2987,19 +2733,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf33'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf33ECF $ecf33_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf33'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf33Request($ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
+    public function recepcionEcf33Request($ecf33_ecf, string $contentType = self::contentTypes['recepcionEcf33'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf33_ecf' is set
+        if ($ecf33_ecf === null || (is_array($ecf33_ecf) && count($ecf33_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf33'
+                'Missing the required parameter $ecf33_ecf when calling recepcionEcf33'
             );
         }
 
@@ -3022,12 +2768,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf33_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf33_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf33_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -3082,32 +2828,32 @@ class EcfApi
     /**
      * Operation recepcionEcf34
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf34ECF $ecf34_ecf ecf34_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf34'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf34($ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
+    public function recepcionEcf34($ecf34_ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
     {
-        list($response) = $this->recepcionEcf34WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf34WithHttpInfo($ecf34_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf34WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf34ECF $ecf34_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf34'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf34WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
+    public function recepcionEcf34WithHttpInfo($ecf34_ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
     {
-        $request = $this->recepcionEcf34Request($ecf, $contentType);
+        $request = $this->recepcionEcf34Request($ecf34_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3152,6 +2898,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -3219,6 +2971,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -3237,15 +2997,15 @@ class EcfApi
     /**
      * Operation recepcionEcf34Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf34ECF $ecf34_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf34'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf34Async($ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
+    public function recepcionEcf34Async($ecf34_ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
     {
-        return $this->recepcionEcf34AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf34AsyncWithHttpInfo($ecf34_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3256,16 +3016,16 @@ class EcfApi
     /**
      * Operation recepcionEcf34AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf34ECF $ecf34_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf34'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf34AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
+    public function recepcionEcf34AsyncWithHttpInfo($ecf34_ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf34Request($ecf, $contentType);
+        $request = $this->recepcionEcf34Request($ecf34_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3306,19 +3066,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf34'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf34ECF $ecf34_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf34'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf34Request($ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
+    public function recepcionEcf34Request($ecf34_ecf, string $contentType = self::contentTypes['recepcionEcf34'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf34_ecf' is set
+        if ($ecf34_ecf === null || (is_array($ecf34_ecf) && count($ecf34_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf34'
+                'Missing the required parameter $ecf34_ecf when calling recepcionEcf34'
             );
         }
 
@@ -3341,12 +3101,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf34_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf34_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf34_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -3401,32 +3161,32 @@ class EcfApi
     /**
      * Operation recepcionEcf41
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf41ECF $ecf41_ecf ecf41_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf41'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf41($ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
+    public function recepcionEcf41($ecf41_ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
     {
-        list($response) = $this->recepcionEcf41WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf41WithHttpInfo($ecf41_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf41WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf41ECF $ecf41_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf41'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf41WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
+    public function recepcionEcf41WithHttpInfo($ecf41_ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
     {
-        $request = $this->recepcionEcf41Request($ecf, $contentType);
+        $request = $this->recepcionEcf41Request($ecf41_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3471,6 +3231,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -3538,6 +3304,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -3556,15 +3330,15 @@ class EcfApi
     /**
      * Operation recepcionEcf41Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf41ECF $ecf41_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf41'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf41Async($ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
+    public function recepcionEcf41Async($ecf41_ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
     {
-        return $this->recepcionEcf41AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf41AsyncWithHttpInfo($ecf41_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3575,16 +3349,16 @@ class EcfApi
     /**
      * Operation recepcionEcf41AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf41ECF $ecf41_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf41'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf41AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
+    public function recepcionEcf41AsyncWithHttpInfo($ecf41_ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf41Request($ecf, $contentType);
+        $request = $this->recepcionEcf41Request($ecf41_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3625,19 +3399,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf41'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf41ECF $ecf41_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf41'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf41Request($ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
+    public function recepcionEcf41Request($ecf41_ecf, string $contentType = self::contentTypes['recepcionEcf41'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf41_ecf' is set
+        if ($ecf41_ecf === null || (is_array($ecf41_ecf) && count($ecf41_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf41'
+                'Missing the required parameter $ecf41_ecf when calling recepcionEcf41'
             );
         }
 
@@ -3660,12 +3434,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf41_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf41_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf41_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -3720,32 +3494,32 @@ class EcfApi
     /**
      * Operation recepcionEcf43
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf43ECF $ecf43_ecf ecf43_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf43'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf43($ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
+    public function recepcionEcf43($ecf43_ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
     {
-        list($response) = $this->recepcionEcf43WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf43WithHttpInfo($ecf43_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf43WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf43ECF $ecf43_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf43'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf43WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
+    public function recepcionEcf43WithHttpInfo($ecf43_ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
     {
-        $request = $this->recepcionEcf43Request($ecf, $contentType);
+        $request = $this->recepcionEcf43Request($ecf43_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3790,6 +3564,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -3857,6 +3637,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -3875,15 +3663,15 @@ class EcfApi
     /**
      * Operation recepcionEcf43Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf43ECF $ecf43_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf43'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf43Async($ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
+    public function recepcionEcf43Async($ecf43_ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
     {
-        return $this->recepcionEcf43AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf43AsyncWithHttpInfo($ecf43_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3894,16 +3682,16 @@ class EcfApi
     /**
      * Operation recepcionEcf43AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf43ECF $ecf43_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf43'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf43AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
+    public function recepcionEcf43AsyncWithHttpInfo($ecf43_ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf43Request($ecf, $contentType);
+        $request = $this->recepcionEcf43Request($ecf43_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3944,19 +3732,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf43'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf43ECF $ecf43_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf43'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf43Request($ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
+    public function recepcionEcf43Request($ecf43_ecf, string $contentType = self::contentTypes['recepcionEcf43'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf43_ecf' is set
+        if ($ecf43_ecf === null || (is_array($ecf43_ecf) && count($ecf43_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf43'
+                'Missing the required parameter $ecf43_ecf when calling recepcionEcf43'
             );
         }
 
@@ -3979,12 +3767,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf43_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf43_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf43_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -4039,32 +3827,32 @@ class EcfApi
     /**
      * Operation recepcionEcf44
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf44ECF $ecf44_ecf ecf44_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf44'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf44($ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
+    public function recepcionEcf44($ecf44_ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
     {
-        list($response) = $this->recepcionEcf44WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf44WithHttpInfo($ecf44_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf44WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf44ECF $ecf44_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf44'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf44WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
+    public function recepcionEcf44WithHttpInfo($ecf44_ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
     {
-        $request = $this->recepcionEcf44Request($ecf, $contentType);
+        $request = $this->recepcionEcf44Request($ecf44_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -4109,6 +3897,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -4176,6 +3970,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -4194,15 +3996,15 @@ class EcfApi
     /**
      * Operation recepcionEcf44Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf44ECF $ecf44_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf44'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf44Async($ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
+    public function recepcionEcf44Async($ecf44_ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
     {
-        return $this->recepcionEcf44AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf44AsyncWithHttpInfo($ecf44_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -4213,16 +4015,16 @@ class EcfApi
     /**
      * Operation recepcionEcf44AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf44ECF $ecf44_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf44'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf44AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
+    public function recepcionEcf44AsyncWithHttpInfo($ecf44_ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf44Request($ecf, $contentType);
+        $request = $this->recepcionEcf44Request($ecf44_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4263,19 +4065,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf44'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf44ECF $ecf44_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf44'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf44Request($ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
+    public function recepcionEcf44Request($ecf44_ecf, string $contentType = self::contentTypes['recepcionEcf44'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf44_ecf' is set
+        if ($ecf44_ecf === null || (is_array($ecf44_ecf) && count($ecf44_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf44'
+                'Missing the required parameter $ecf44_ecf when calling recepcionEcf44'
             );
         }
 
@@ -4298,12 +4100,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf44_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf44_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf44_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -4358,32 +4160,32 @@ class EcfApi
     /**
      * Operation recepcionEcf45
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf45ECF $ecf45_ecf ecf45_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf45'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf45($ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
+    public function recepcionEcf45($ecf45_ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
     {
-        list($response) = $this->recepcionEcf45WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf45WithHttpInfo($ecf45_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf45WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf45ECF $ecf45_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf45'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf45WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
+    public function recepcionEcf45WithHttpInfo($ecf45_ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
     {
-        $request = $this->recepcionEcf45Request($ecf, $contentType);
+        $request = $this->recepcionEcf45Request($ecf45_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -4428,6 +4230,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -4495,6 +4303,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -4513,15 +4329,15 @@ class EcfApi
     /**
      * Operation recepcionEcf45Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf45ECF $ecf45_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf45'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf45Async($ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
+    public function recepcionEcf45Async($ecf45_ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
     {
-        return $this->recepcionEcf45AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf45AsyncWithHttpInfo($ecf45_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -4532,16 +4348,16 @@ class EcfApi
     /**
      * Operation recepcionEcf45AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf45ECF $ecf45_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf45'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf45AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
+    public function recepcionEcf45AsyncWithHttpInfo($ecf45_ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf45Request($ecf, $contentType);
+        $request = $this->recepcionEcf45Request($ecf45_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4582,19 +4398,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf45'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf45ECF $ecf45_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf45'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf45Request($ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
+    public function recepcionEcf45Request($ecf45_ecf, string $contentType = self::contentTypes['recepcionEcf45'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf45_ecf' is set
+        if ($ecf45_ecf === null || (is_array($ecf45_ecf) && count($ecf45_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf45'
+                'Missing the required parameter $ecf45_ecf when calling recepcionEcf45'
             );
         }
 
@@ -4617,12 +4433,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf45_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf45_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf45_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -4677,32 +4493,32 @@ class EcfApi
     /**
      * Operation recepcionEcf46
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf46ECF $ecf46_ecf ecf46_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf46'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf46($ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
+    public function recepcionEcf46($ecf46_ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
     {
-        list($response) = $this->recepcionEcf46WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf46WithHttpInfo($ecf46_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf46WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf46ECF $ecf46_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf46'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf46WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
+    public function recepcionEcf46WithHttpInfo($ecf46_ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
     {
-        $request = $this->recepcionEcf46Request($ecf, $contentType);
+        $request = $this->recepcionEcf46Request($ecf46_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -4747,6 +4563,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -4814,6 +4636,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -4832,15 +4662,15 @@ class EcfApi
     /**
      * Operation recepcionEcf46Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf46ECF $ecf46_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf46'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf46Async($ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
+    public function recepcionEcf46Async($ecf46_ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
     {
-        return $this->recepcionEcf46AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf46AsyncWithHttpInfo($ecf46_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -4851,16 +4681,16 @@ class EcfApi
     /**
      * Operation recepcionEcf46AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf46ECF $ecf46_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf46'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf46AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
+    public function recepcionEcf46AsyncWithHttpInfo($ecf46_ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf46Request($ecf, $contentType);
+        $request = $this->recepcionEcf46Request($ecf46_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4901,19 +4731,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf46'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf46ECF $ecf46_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf46'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf46Request($ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
+    public function recepcionEcf46Request($ecf46_ecf, string $contentType = self::contentTypes['recepcionEcf46'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf46_ecf' is set
+        if ($ecf46_ecf === null || (is_array($ecf46_ecf) && count($ecf46_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf46'
+                'Missing the required parameter $ecf46_ecf when calling recepcionEcf46'
             );
         }
 
@@ -4936,12 +4766,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf46_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf46_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf46_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -4996,32 +4826,32 @@ class EcfApi
     /**
      * Operation recepcionEcf47
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf47ECF $ecf47_ecf ecf47_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf47'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
+     * @return \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function recepcionEcf47($ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
+    public function recepcionEcf47($ecf47_ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
     {
-        list($response) = $this->recepcionEcf47WithHttpInfo($ecf, $contentType);
+        list($response) = $this->recepcionEcf47WithHttpInfo($ecf47_ecf, $contentType);
         return $response;
     }
 
     /**
      * Operation recepcionEcf47WithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf47ECF $ecf47_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf47'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Ecfx\EcfDgii\Model\EcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function recepcionEcf47WithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
+    public function recepcionEcf47WithHttpInfo($ecf47_ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
     {
-        $request = $this->recepcionEcf47Request($ecf, $contentType);
+        $request = $this->recepcionEcf47Request($ecf47_ecf, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -5066,6 +4896,12 @@ class EcfApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Ecfx\EcfDgii\Model\ProblemDetails',
                         $request,
@@ -5133,6 +4969,14 @@ class EcfApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Ecfx\EcfDgii\Model\ProblemDetails',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -5151,15 +4995,15 @@ class EcfApi
     /**
      * Operation recepcionEcf47Async
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf47ECF $ecf47_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf47'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf47Async($ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
+    public function recepcionEcf47Async($ecf47_ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
     {
-        return $this->recepcionEcf47AsyncWithHttpInfo($ecf, $contentType)
+        return $this->recepcionEcf47AsyncWithHttpInfo($ecf47_ecf, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -5170,16 +5014,16 @@ class EcfApi
     /**
      * Operation recepcionEcf47AsyncWithHttpInfo
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf47ECF $ecf47_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf47'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function recepcionEcf47AsyncWithHttpInfo($ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
+    public function recepcionEcf47AsyncWithHttpInfo($ecf47_ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\EcfResponse';
-        $request = $this->recepcionEcf47Request($ecf, $contentType);
+        $request = $this->recepcionEcf47Request($ecf47_ecf, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -5220,19 +5064,19 @@ class EcfApi
     /**
      * Create request for operation 'recepcionEcf47'
      *
-     * @param  \Ecfx\EcfDgii\Model\ECF $ecf (required)
+     * @param  \Ecfx\EcfDgii\Model\Ecf47ECF $ecf47_ecf (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['recepcionEcf47'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function recepcionEcf47Request($ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
+    public function recepcionEcf47Request($ecf47_ecf, string $contentType = self::contentTypes['recepcionEcf47'][0])
     {
 
-        // verify the required parameter 'ecf' is set
-        if ($ecf === null || (is_array($ecf) && count($ecf) === 0)) {
+        // verify the required parameter 'ecf47_ecf' is set
+        if ($ecf47_ecf === null || (is_array($ecf47_ecf) && count($ecf47_ecf) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $ecf when calling recepcionEcf47'
+                'Missing the required parameter $ecf47_ecf when calling recepcionEcf47'
             );
         }
 
@@ -5255,12 +5099,12 @@ class EcfApi
         );
 
         // for model (json/xml)
-        if (isset($ecf)) {
+        if (isset($ecf47_ecf)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($ecf47_ecf));
             } else {
-                $httpBody = $ecf;
+                $httpBody = $ecf47_ecf;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -5323,6 +5167,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchAllEcfs'] to see the possible values for this operation
@@ -5331,9 +5177,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function searchAllEcfs($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
+    public function searchAllEcfs($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
     {
-        list($response) = $this->searchAllEcfsWithHttpInfo($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        list($response) = $this->searchAllEcfsWithHttpInfo($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
         return $response;
     }
 
@@ -5348,6 +5194,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchAllEcfs'] to see the possible values for this operation
@@ -5356,9 +5204,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return array of \Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function searchAllEcfsWithHttpInfo($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
+    public function searchAllEcfsWithHttpInfo($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
     {
-        $request = $this->searchAllEcfsRequest($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        $request = $this->searchAllEcfsRequest($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -5496,6 +5344,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchAllEcfs'] to see the possible values for this operation
@@ -5503,9 +5353,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchAllEcfsAsync($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
+    public function searchAllEcfsAsync($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
     {
-        return $this->searchAllEcfsAsyncWithHttpInfo($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType)
+        return $this->searchAllEcfsAsyncWithHttpInfo($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -5524,6 +5374,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchAllEcfs'] to see the possible values for this operation
@@ -5531,10 +5383,10 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchAllEcfsAsyncWithHttpInfo($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
+    public function searchAllEcfsAsyncWithHttpInfo($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse';
-        $request = $this->searchAllEcfsRequest($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        $request = $this->searchAllEcfsRequest($encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -5583,6 +5435,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchAllEcfs'] to see the possible values for this operation
@@ -5590,7 +5444,7 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function searchAllEcfsRequest($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
+    public function searchAllEcfsRequest($encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchAllEcfs'][0])
     {
 
 
@@ -5607,6 +5461,8 @@ class EcfApi
             throw new \InvalidArgumentException("invalid value for \"amount_to\" when calling EcfApi.searchAllEcfs, must conform to the pattern /^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$/.");
         }
         
+
+
         if ($page !== null && !preg_match("/^-?(?:0|[1-9]\\d*)$/", $page)) {
             throw new \InvalidArgumentException("invalid value for \"page\" when calling EcfApi.searchAllEcfs, must conform to the pattern /^-?(?:0|[1-9]\\d*)$/.");
         }
@@ -5691,6 +5547,24 @@ class EcfApi
             $amount_to,
             'AmountTo', // param base name
             'number', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $progresses,
+            'Progresses', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dgii_estados,
+            'DgiiEstados', // param base name
+            'array', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -5786,6 +5660,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchEcfs'] to see the possible values for this operation
@@ -5794,9 +5670,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function searchEcfs($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
+    public function searchEcfs($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
     {
-        list($response) = $this->searchEcfsWithHttpInfo($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        list($response) = $this->searchEcfsWithHttpInfo($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
         return $response;
     }
 
@@ -5812,6 +5688,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchEcfs'] to see the possible values for this operation
@@ -5820,9 +5698,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return array of \Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function searchEcfsWithHttpInfo($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
+    public function searchEcfsWithHttpInfo($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
     {
-        $request = $this->searchEcfsRequest($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        $request = $this->searchEcfsRequest($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -5961,6 +5839,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchEcfs'] to see the possible values for this operation
@@ -5968,9 +5848,9 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchEcfsAsync($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
+    public function searchEcfsAsync($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
     {
-        return $this->searchEcfsAsyncWithHttpInfo($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType)
+        return $this->searchEcfsAsyncWithHttpInfo($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -5990,6 +5870,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchEcfs'] to see the possible values for this operation
@@ -5997,10 +5879,10 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function searchEcfsAsyncWithHttpInfo($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
+    public function searchEcfsAsyncWithHttpInfo($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\PaginatedApiResultOfEcfResponse';
-        $request = $this->searchEcfsRequest($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $page, $limit, $contentType);
+        $request = $this->searchEcfsRequest($rnc, $encfs, $ids, $tipos_ecfs, $include_ecf_content, $from_fecha_emision, $to_fecha_emision, $amount_from, $amount_to, $progresses, $dgii_estados, $page, $limit, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -6050,6 +5932,8 @@ class EcfApi
      * @param  \DateTime|null $to_fecha_emision (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_from (optional)
      * @param  \Ecfx\EcfDgii\Model\SearchEcfsAmountFromParameter|null $amount_to (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfProgress[]|null $progresses (optional)
+     * @param  \Ecfx\EcfDgii\Model\EcfEstado[]|null $dgii_estados (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchEcfs'] to see the possible values for this operation
@@ -6057,7 +5941,7 @@ class EcfApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function searchEcfsRequest($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
+    public function searchEcfsRequest($rnc, $encfs = null, $ids = null, $tipos_ecfs = null, $include_ecf_content = false, $from_fecha_emision = null, $to_fecha_emision = null, $amount_from = null, $amount_to = null, $progresses = null, $dgii_estados = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['searchEcfs'][0])
     {
 
         // verify the required parameter 'rnc' is set
@@ -6081,6 +5965,8 @@ class EcfApi
             throw new \InvalidArgumentException("invalid value for \"amount_to\" when calling EcfApi.searchEcfs, must conform to the pattern /^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$/.");
         }
         
+
+
         if ($page !== null && !preg_match("/^-?(?:0|[1-9]\\d*)$/", $page)) {
             throw new \InvalidArgumentException("invalid value for \"page\" when calling EcfApi.searchEcfs, must conform to the pattern /^-?(?:0|[1-9]\\d*)$/.");
         }
@@ -6165,6 +6051,24 @@ class EcfApi
             $amount_to,
             'AmountTo', // param base name
             'number', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $progresses,
+            'Progresses', // param base name
+            'array', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $dgii_estados,
+            'DgiiEstados', // param base name
+            'array', // openApiType
             'form', // style
             true, // explode
             false // required

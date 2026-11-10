@@ -203,6 +203,7 @@ El `EcfService` enruta automaticamente al endpoint correcto segun el tipo de ECF
 
 ```php
 use Ecfx\EcfDgii\EcfService;
+use Ecfx\EcfDgii\EcfNotReceivedException;
 use Ecfx\EcfDgii\EcfProcessingException;
 use Ecfx\EcfDgii\EcfPollingTimeoutException;
 
@@ -214,10 +215,36 @@ try {
     echo "ECF aceptado!\n";
     echo "Status: " . $result->getEstatus() . "\n";
     echo "ENCF: " . $result->getEncf() . "\n";
+} catch (EcfNotReceivedException $e) {
+    // La DGII confirmo que no tiene registro del documento: el eNCF no se uso
+    // y se puede enviar de nuevo (mismo eNCF, nueva solicitud).
+    echo "No recibido por la DGII: " . $e->getMessage() . "\n";
 } catch (EcfProcessingException $e) {
     echo "ECF rechazado: " . $e->getMessage() . "\n";
 } catch (EcfPollingTimeoutException $e) {
+    // Si el ultimo estado es PendingReconciliation, NO reenvies ni reutilices el eNCF.
     echo "Polling timeout: " . $e->getMessage() . "\n";
+}
+```
+
+### Estado del envio a la DGII (`dgiiSubmissionState`)
+
+`EcfResponse::getDgiiSubmissionState()` indica en que punto esta el envio a la DGII (o `null` en documentos anteriores a este campo). Dos estados requieren atencion:
+
+| Estado | Significado | Que hacer |
+|--------|-------------|-----------|
+| `PendingReconciliation` | El resultado de la DGII aun no esta confirmado (`progress = UploadedToDgii`, `estatus = EnProceso`). | Seguir consultando. **No** reenviar ni reutilizar el eNCF. `EcfService` sigue haciendo polling. |
+| `NotReceived` | La DGII confirmo que no tiene registro del documento (`progress = Error`, `estatus = null`, `secuenciaUtilizada = false`, `errors` con el detalle). | Estado final, pero el eNCF no se uso: se puede enviar **el mismo eNCF** otra vez como una nueva solicitud. `EcfService` lanza `EcfNotReceivedException`. |
+
+Los demas valores son `Prepared`, `Sending`, `Accepted`, `Rejected`, `ValidationFailed` y `ReservationBlocked`. Si el API agrega un valor nuevo, el SDK lo devuelve como string sin lanzar excepcion.
+
+Si haces polling por tu cuenta (por ejemplo con `getEcfById`), usa los helpers:
+
+```php
+if (EcfService::canResubmitSameEncf($response)) {
+    // NotReceived: reenviar el mismo eNCF como nueva solicitud
+} elseif (EcfService::isPendingReconciliation($response)) {
+    // seguir consultando; no reenviar
 }
 ```
 
@@ -239,7 +266,7 @@ Tu sistema                          ECF SSD                         DGII
 
 1. **Enrutamiento automatico:** Determina el endpoint correcto (`/ecf/31`, `/ecf/32`, etc.) basandose en el `tipoeCF`
 2. **Envio:** POST al endpoint correspondiente
-3. **Polling:** Consulta periodicamente el estado hasta que la DGII responda (`Finished` o `Error`)
+3. **Polling:** Consulta periodicamente el estado hasta que la DGII responda (`Finished` o `Error`); mientras el estado sea `PendingReconciliation` sigue consultando
 4. **Resultado:** Retorna el `EcfResponse` con el estado final, codigo de seguridad, URL de impresion, etc.
 
 ## Respuesta (`EcfResponse`)
@@ -251,8 +278,10 @@ Al completarse el envio, recibes un `EcfResponse` con los datos necesarios para 
 | `ImpresionUrl` | URL para generar el codigo QR requerido por la DGII en el comprobante impreso |
 | `CodSec` | Codigo de seguridad -- debe aparecer en el comprobante impreso |
 | `FechaFirma` | Fecha y hora de la firma digital del comprobante |
-| `Estatus` | Estado DGII: `Aceptado`, `AceptadoCondicional`, `Rechazado` |
-| `Progress` | Estado del procesamiento: `Queued`, `Sending`, `Polling`, `Finished`, `Error` |
+| `Estatus` | Estado DGII: `Aceptado`, `AceptadoCondicional`, `Rechazado`, `EnProceso`, `NoEncontrado` |
+| `Progress` | Estado del procesamiento: `New`, `Processing`, `UploadedToDgii`, `Finished`, `Error` |
+| `DgiiSubmissionState` | Estado del envio a la DGII (ver [arriba](#estado-del-envio-a-la-dgii-dgiisubmissionstate)); `null` en documentos anteriores |
+| `SecuenciaUtilizada` | Si el eNCF quedo usado ante la DGII |
 | `Encf` | Numero de comprobante fiscal electronico (eNCF) |
 | `Mensaje` | Mensaje de respuesta de la DGII |
 | `Errors` | Detalle de errores (si los hay) |
@@ -299,7 +328,8 @@ Ademas de enviar comprobantes, el SDK expone todos los endpoints del API:
 | `EcfApi` | Envio de ECF (tipos 31-47), consultas, busquedas, anulaciones |
 | `CompanyApi` | CRUD de empresas y gestion de certificados |
 | `DgiiApi` | Consultas DGII (directorio, estado, timbre, track IDs, etc.) |
-| `RecepcionApi` | Seguimiento de solicitudes de recepcion |
+| `RecepcionApi` | e-CF recibidos de otros emisores y envio de aprobacion comercial (`sendAprobacionComercial`) |
+| `AprobacionComercialApi` | Consulta de aprobaciones comerciales (ACECF) recibidas |
 | `ApiKeyApi` | Gestion de API keys |
 
 ### Funcionalidades adicionales
@@ -344,8 +374,8 @@ $ecfApi = new EcfApi($client, $config);
 $response = $ecfApi->recepcionEcf31($ecf);           // Factura de credito fiscal
 $response = $ecfApi->recepcionEcf32($ecf);           // Factura de consumo
 $results = $ecfApi->searchEcfs('123456789');           // Buscar ECFs por RNC
+$results = $ecfApi->searchEcfs('123456789', progresses: ['Error'], page: 2, limit: 50); // usa argumentos con nombre
 $ecfById = $ecfApi->getEcfById('123456789', $msgId);  // Obtener ECF por message ID
-$ecfApi->aprobacionComercial('123456789', $encf, $acecfRequest); // Aprobacion comercial
 
 // Consultas DGII
 $dgiiApi = new DgiiApi($client, $config);
@@ -357,14 +387,18 @@ $servicios = $dgiiApi->estatusServiciosObtenerEstatus('123456789');
 // Seguimiento de recepcion
 $recepcionApi = new RecepcionApi($client, $config);
 $requests = $recepcionApi->searchEcfReceptionRequests();
+$recepcionApi->sendAprobacionComercial($messageId, $acecfRequest); // Aprobacion comercial de un e-CF recibido
 ```
+
+> Los metodos de busqueda tienen muchos filtros opcionales y el API agrega filtros nuevos con el tiempo. Pasa `page`, `limit` y los filtros como **argumentos con nombre** (PHP 8) para que tu codigo no dependa de su posicion.
 
 ## Manejo de Errores
 
 | Excepcion | Cuando |
 |-----------|--------|
+| `EcfNotReceivedException` | La DGII no tiene registro del documento (`NotReceived`); el mismo eNCF se puede reenviar. Extiende `EcfProcessingException` |
 | `EcfProcessingException` | La DGII rechaza el ECF durante el procesamiento |
-| `EcfPollingTimeoutException` | El polling excede el maximo de intentos sin resultado final |
+| `EcfPollingTimeoutException` | El polling excede el maximo de intentos sin resultado final (`getLastResponse()` trae la ultima respuesta) |
 | `ApiException` | Errores HTTP/red al comunicarse con el API |
 
 ```php
@@ -411,6 +445,8 @@ openapi-generator generate \
   -o . \
   --skip-validate-spec
 ```
+
+Usa openapi-generator 7.20.0 (`.openapi-generator/VERSION`). Los archivos escritos a mano y los parches (`README.md`, `composer.json`, `src/Configuration.php`, `src/ObjectSerializer.php`, ...) estan en `.openapi-generator-ignore` para que la regeneracion no los sobrescriba.
 
 ## Contribuir
 

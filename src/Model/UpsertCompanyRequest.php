@@ -58,8 +58,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
       */
     protected static $openAPITypes = [
         'rnc' => 'string',
-        'legal_name' => 'string',
-        'name' => 'string'
+        'name' => 'string',
+        'employee_count' => 'string',
+        'estimated_invoices' => 'string',
+        'legal_rep_first_name' => 'string',
+        'legal_rep_last_name' => 'string',
+        'address' => 'string',
+        'certification_declared' => 'bool',
+        'certification_status' => 'string'
     ];
 
     /**
@@ -71,8 +77,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
       */
     protected static $openAPIFormats = [
         'rnc' => null,
-        'legal_name' => null,
-        'name' => null
+        'name' => null,
+        'employee_count' => null,
+        'estimated_invoices' => null,
+        'legal_rep_first_name' => null,
+        'legal_rep_last_name' => null,
+        'address' => null,
+        'certification_declared' => null,
+        'certification_status' => null
     ];
 
     /**
@@ -82,8 +94,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
       */
     protected static array $openAPINullables = [
         'rnc' => false,
-        'legal_name' => false,
-        'name' => false
+        'name' => false,
+        'employee_count' => true,
+        'estimated_invoices' => true,
+        'legal_rep_first_name' => true,
+        'legal_rep_last_name' => true,
+        'address' => true,
+        'certification_declared' => true,
+        'certification_status' => true
     ];
 
     /**
@@ -173,8 +191,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $attributeMap = [
         'rnc' => 'rnc',
-        'legal_name' => 'legalName',
-        'name' => 'name'
+        'name' => 'name',
+        'employee_count' => 'employeeCount',
+        'estimated_invoices' => 'estimatedInvoices',
+        'legal_rep_first_name' => 'legalRepFirstName',
+        'legal_rep_last_name' => 'legalRepLastName',
+        'address' => 'address',
+        'certification_declared' => 'certificationDeclared',
+        'certification_status' => 'certificationStatus'
     ];
 
     /**
@@ -184,8 +208,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $setters = [
         'rnc' => 'setRnc',
-        'legal_name' => 'setLegalName',
-        'name' => 'setName'
+        'name' => 'setName',
+        'employee_count' => 'setEmployeeCount',
+        'estimated_invoices' => 'setEstimatedInvoices',
+        'legal_rep_first_name' => 'setLegalRepFirstName',
+        'legal_rep_last_name' => 'setLegalRepLastName',
+        'address' => 'setAddress',
+        'certification_declared' => 'setCertificationDeclared',
+        'certification_status' => 'setCertificationStatus'
     ];
 
     /**
@@ -195,8 +225,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
      */
     protected static $getters = [
         'rnc' => 'getRnc',
-        'legal_name' => 'getLegalName',
-        'name' => 'getName'
+        'name' => 'getName',
+        'employee_count' => 'getEmployeeCount',
+        'estimated_invoices' => 'getEstimatedInvoices',
+        'legal_rep_first_name' => 'getLegalRepFirstName',
+        'legal_rep_last_name' => 'getLegalRepLastName',
+        'address' => 'getAddress',
+        'certification_declared' => 'getCertificationDeclared',
+        'certification_status' => 'getCertificationStatus'
     ];
 
     /**
@@ -257,8 +293,14 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     public function __construct(?array $data = null)
     {
         $this->setIfExists('rnc', $data ?? [], null);
-        $this->setIfExists('legal_name', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('employee_count', $data ?? [], null);
+        $this->setIfExists('estimated_invoices', $data ?? [], null);
+        $this->setIfExists('legal_rep_first_name', $data ?? [], null);
+        $this->setIfExists('legal_rep_last_name', $data ?? [], null);
+        $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('certification_declared', $data ?? [], null);
+        $this->setIfExists('certification_status', $data ?? [], null);
     }
 
     /**
@@ -295,18 +337,35 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
             $invalidProperties[] = "invalid value for 'rnc', the character length must be smaller than or equal to 11.";
         }
 
-        if ($this->container['legal_name'] === null) {
-            $invalidProperties[] = "'legal_name' can't be null";
-        }
-        if ((mb_strlen($this->container['legal_name']) > 2000)) {
-            $invalidProperties[] = "invalid value for 'legal_name', the character length must be smaller than or equal to 2000.";
-        }
-
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
         if ((mb_strlen($this->container['name']) > 2000)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 2000.";
+        }
+
+        if (!is_null($this->container['employee_count']) && (mb_strlen($this->container['employee_count']) > 20)) {
+            $invalidProperties[] = "invalid value for 'employee_count', the character length must be smaller than or equal to 20.";
+        }
+
+        if (!is_null($this->container['estimated_invoices']) && (mb_strlen($this->container['estimated_invoices']) > 20)) {
+            $invalidProperties[] = "invalid value for 'estimated_invoices', the character length must be smaller than or equal to 20.";
+        }
+
+        if (!is_null($this->container['legal_rep_first_name']) && (mb_strlen($this->container['legal_rep_first_name']) > 200)) {
+            $invalidProperties[] = "invalid value for 'legal_rep_first_name', the character length must be smaller than or equal to 200.";
+        }
+
+        if (!is_null($this->container['legal_rep_last_name']) && (mb_strlen($this->container['legal_rep_last_name']) > 200)) {
+            $invalidProperties[] = "invalid value for 'legal_rep_last_name', the character length must be smaller than or equal to 200.";
+        }
+
+        if (!is_null($this->container['address']) && (mb_strlen($this->container['address']) > 500)) {
+            $invalidProperties[] = "invalid value for 'address', the character length must be smaller than or equal to 500.";
+        }
+
+        if (!is_null($this->container['certification_status']) && (mb_strlen($this->container['certification_status']) > 50)) {
+            $invalidProperties[] = "invalid value for 'certification_status', the character length must be smaller than or equal to 50.";
         }
 
         return $invalidProperties;
@@ -356,37 +415,6 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
     }
 
     /**
-     * Gets legal_name
-     *
-     * @return string
-     */
-    public function getLegalName()
-    {
-        return $this->container['legal_name'];
-    }
-
-    /**
-     * Sets legal_name
-     *
-     * @param string $legal_name legal_name
-     *
-     * @return self
-     */
-    public function setLegalName($legal_name)
-    {
-        if (is_null($legal_name)) {
-            throw new \InvalidArgumentException('non-nullable legal_name cannot be null');
-        }
-        if ((mb_strlen($legal_name) > 2000)) {
-            throw new \InvalidArgumentException('invalid length for $legal_name when calling UpsertCompanyRequest., must be smaller than or equal to 2000.');
-        }
-
-        $this->container['legal_name'] = $legal_name;
-
-        return $this;
-    }
-
-    /**
      * Gets name
      *
      * @return string
@@ -413,6 +441,268 @@ class UpsertCompanyRequest implements ModelInterface, ArrayAccess, \JsonSerializ
         }
 
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets employee_count
+     *
+     * @return string|null
+     */
+    public function getEmployeeCount()
+    {
+        return $this->container['employee_count'];
+    }
+
+    /**
+     * Sets employee_count
+     *
+     * @param string|null $employee_count employee_count
+     *
+     * @return self
+     */
+    public function setEmployeeCount($employee_count)
+    {
+        if (is_null($employee_count)) {
+            array_push($this->openAPINullablesSetToNull, 'employee_count');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('employee_count', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($employee_count) && (mb_strlen($employee_count) > 20)) {
+            throw new \InvalidArgumentException('invalid length for $employee_count when calling UpsertCompanyRequest., must be smaller than or equal to 20.');
+        }
+
+        $this->container['employee_count'] = $employee_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets estimated_invoices
+     *
+     * @return string|null
+     */
+    public function getEstimatedInvoices()
+    {
+        return $this->container['estimated_invoices'];
+    }
+
+    /**
+     * Sets estimated_invoices
+     *
+     * @param string|null $estimated_invoices estimated_invoices
+     *
+     * @return self
+     */
+    public function setEstimatedInvoices($estimated_invoices)
+    {
+        if (is_null($estimated_invoices)) {
+            array_push($this->openAPINullablesSetToNull, 'estimated_invoices');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('estimated_invoices', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($estimated_invoices) && (mb_strlen($estimated_invoices) > 20)) {
+            throw new \InvalidArgumentException('invalid length for $estimated_invoices when calling UpsertCompanyRequest., must be smaller than or equal to 20.');
+        }
+
+        $this->container['estimated_invoices'] = $estimated_invoices;
+
+        return $this;
+    }
+
+    /**
+     * Gets legal_rep_first_name
+     *
+     * @return string|null
+     */
+    public function getLegalRepFirstName()
+    {
+        return $this->container['legal_rep_first_name'];
+    }
+
+    /**
+     * Sets legal_rep_first_name
+     *
+     * @param string|null $legal_rep_first_name legal_rep_first_name
+     *
+     * @return self
+     */
+    public function setLegalRepFirstName($legal_rep_first_name)
+    {
+        if (is_null($legal_rep_first_name)) {
+            array_push($this->openAPINullablesSetToNull, 'legal_rep_first_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('legal_rep_first_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($legal_rep_first_name) && (mb_strlen($legal_rep_first_name) > 200)) {
+            throw new \InvalidArgumentException('invalid length for $legal_rep_first_name when calling UpsertCompanyRequest., must be smaller than or equal to 200.');
+        }
+
+        $this->container['legal_rep_first_name'] = $legal_rep_first_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets legal_rep_last_name
+     *
+     * @return string|null
+     */
+    public function getLegalRepLastName()
+    {
+        return $this->container['legal_rep_last_name'];
+    }
+
+    /**
+     * Sets legal_rep_last_name
+     *
+     * @param string|null $legal_rep_last_name legal_rep_last_name
+     *
+     * @return self
+     */
+    public function setLegalRepLastName($legal_rep_last_name)
+    {
+        if (is_null($legal_rep_last_name)) {
+            array_push($this->openAPINullablesSetToNull, 'legal_rep_last_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('legal_rep_last_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($legal_rep_last_name) && (mb_strlen($legal_rep_last_name) > 200)) {
+            throw new \InvalidArgumentException('invalid length for $legal_rep_last_name when calling UpsertCompanyRequest., must be smaller than or equal to 200.');
+        }
+
+        $this->container['legal_rep_last_name'] = $legal_rep_last_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets address
+     *
+     * @return string|null
+     */
+    public function getAddress()
+    {
+        return $this->container['address'];
+    }
+
+    /**
+     * Sets address
+     *
+     * @param string|null $address address
+     *
+     * @return self
+     */
+    public function setAddress($address)
+    {
+        if (is_null($address)) {
+            array_push($this->openAPINullablesSetToNull, 'address');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('address', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($address) && (mb_strlen($address) > 500)) {
+            throw new \InvalidArgumentException('invalid length for $address when calling UpsertCompanyRequest., must be smaller than or equal to 500.');
+        }
+
+        $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets certification_declared
+     *
+     * @return bool|null
+     */
+    public function getCertificationDeclared()
+    {
+        return $this->container['certification_declared'];
+    }
+
+    /**
+     * Sets certification_declared
+     *
+     * @param bool|null $certification_declared certification_declared
+     *
+     * @return self
+     */
+    public function setCertificationDeclared($certification_declared)
+    {
+        if (is_null($certification_declared)) {
+            array_push($this->openAPINullablesSetToNull, 'certification_declared');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('certification_declared', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['certification_declared'] = $certification_declared;
+
+        return $this;
+    }
+
+    /**
+     * Gets certification_status
+     *
+     * @return string|null
+     */
+    public function getCertificationStatus()
+    {
+        return $this->container['certification_status'];
+    }
+
+    /**
+     * Sets certification_status
+     *
+     * @param string|null $certification_status certification_status
+     *
+     * @return self
+     */
+    public function setCertificationStatus($certification_status)
+    {
+        if (is_null($certification_status)) {
+            array_push($this->openAPINullablesSetToNull, 'certification_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('certification_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($certification_status) && (mb_strlen($certification_status) > 50)) {
+            throw new \InvalidArgumentException('invalid length for $certification_status when calling UpsertCompanyRequest., must be smaller than or equal to 50.');
+        }
+
+        $this->container['certification_status'] = $certification_status;
 
         return $this;
     }

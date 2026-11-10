@@ -60,10 +60,10 @@ class AnulacionListResponse implements ModelInterface, ArrayAccess, \JsonSeriali
         'anulacion_id' => 'string',
         'tenant_id' => 'string',
         'company_rnc' => 'string',
-        'cantidade_ncf_anulados' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'cantidade_ncf_anulados' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'detalle_anulacion' => '\Ecfx\EcfDgii\Model\DetalleAnulacionRequestDto[]',
         'response' => '\Ecfx\EcfDgii\Model\RespuestaAnulacionRango',
-        'status_code' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'status_code' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'file_name' => 'string',
         'fecha_hora_anulacione_ncf' => '\DateTime',
         'created_on' => '\DateTime',
@@ -457,7 +457,7 @@ class AnulacionListResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Gets cantidade_ncf_anulados
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getCantidadeNcfAnulados()
     {
@@ -467,7 +467,7 @@ class AnulacionListResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets cantidade_ncf_anulados
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $cantidade_ncf_anulados cantidade_ncf_anulados
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $cantidade_ncf_anulados cantidade_ncf_anulados
      *
      * @return self
      */
@@ -552,7 +552,7 @@ class AnulacionListResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Gets status_code
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getStatusCode()
     {
@@ -562,7 +562,7 @@ class AnulacionListResponse implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets status_code
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $status_code status_code
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $status_code status_code
      *
      * @return self
      */

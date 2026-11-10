@@ -90,7 +90,7 @@ class RespuestaConsultaRFCE implements ModelInterface, ArrayAccess, \JsonSeriali
     protected static array $openAPINullables = [
         'rnc' => true,
         'encf' => false,
-        'secuencia_utilizada' => false,
+        'secuencia_utilizada' => true,
         'codigo' => true,
         'estado' => true,
         'mensajes' => true
@@ -406,7 +406,14 @@ class RespuestaConsultaRFCE implements ModelInterface, ArrayAccess, \JsonSeriali
     public function setSecuenciaUtilizada($secuencia_utilizada)
     {
         if (is_null($secuencia_utilizada)) {
-            throw new \InvalidArgumentException('non-nullable secuencia_utilizada cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'secuencia_utilizada');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('secuencia_utilizada', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['secuencia_utilizada'] = $secuencia_utilizada;
 

@@ -57,7 +57,7 @@ class Ecf46Item implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'numero_linea' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'numero_linea' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'tabla_codigos_item' => '\Ecfx\EcfDgii\Model\Ecf46CodigosItem[]',
         'indicador_facturacion' => '\Ecfx\EcfDgii\Model\Ecf46IndicadorFacturacionType',
         'nombre_item' => 'string',
@@ -432,7 +432,7 @@ class Ecf46Item implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets numero_linea
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner
      */
     public function getNumeroLinea()
     {
@@ -442,7 +442,7 @@ class Ecf46Item implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets numero_linea
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress $numero_linea numero_linea
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner $numero_linea numero_linea
      *
      * @return self
      */

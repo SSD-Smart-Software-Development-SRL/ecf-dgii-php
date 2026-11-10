@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **string** |  | [optional]
 **title** | **string** |  | [optional]
-**status** | [**\Ecfx\EcfDgii\Model\IdDocTotalPaginas**](IdDocTotalPaginas.md) |  | [optional]
+**status** | [**\Ecfx\EcfDgii\Model\Ecf31IdDocTotalPaginas**](Ecf31IdDocTotalPaginas.md) |  | [optional]
 **detail** | **string** |  | [optional]
 **instance** | **string** |  | [optional]
 

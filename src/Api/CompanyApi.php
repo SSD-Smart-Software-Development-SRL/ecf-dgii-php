@@ -385,15 +385,16 @@ class CompanyApi
      * @param  string[]|null $names names (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit limit (optional, default to 25)
+     * @param  string|null $search search (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCompanies'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \Ecfx\EcfDgii\Model\PaginatedApiResultOfCompanyResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails
      */
-    public function getCompanies($rncs = null, $names = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['getCompanies'][0])
+    public function getCompanies($rncs = null, $names = null, $page = 1, $limit = 25, $search = null, string $contentType = self::contentTypes['getCompanies'][0])
     {
-        list($response) = $this->getCompaniesWithHttpInfo($rncs, $names, $page, $limit, $contentType);
+        list($response) = $this->getCompaniesWithHttpInfo($rncs, $names, $page, $limit, $search, $contentType);
         return $response;
     }
 
@@ -404,15 +405,16 @@ class CompanyApi
      * @param  string[]|null $names (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
+     * @param  string|null $search (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCompanies'] to see the possible values for this operation
      *
      * @throws \Ecfx\EcfDgii\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \Ecfx\EcfDgii\Model\PaginatedApiResultOfCompanyResponse|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails|\Ecfx\EcfDgii\Model\ProblemDetails, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getCompaniesWithHttpInfo($rncs = null, $names = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['getCompanies'][0])
+    public function getCompaniesWithHttpInfo($rncs = null, $names = null, $page = 1, $limit = 25, $search = null, string $contentType = self::contentTypes['getCompanies'][0])
     {
-        $request = $this->getCompaniesRequest($rncs, $names, $page, $limit, $contentType);
+        $request = $this->getCompaniesRequest($rncs, $names, $page, $limit, $search, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -532,14 +534,15 @@ class CompanyApi
      * @param  string[]|null $names (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
+     * @param  string|null $search (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCompanies'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCompaniesAsync($rncs = null, $names = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['getCompanies'][0])
+    public function getCompaniesAsync($rncs = null, $names = null, $page = 1, $limit = 25, $search = null, string $contentType = self::contentTypes['getCompanies'][0])
     {
-        return $this->getCompaniesAsyncWithHttpInfo($rncs, $names, $page, $limit, $contentType)
+        return $this->getCompaniesAsyncWithHttpInfo($rncs, $names, $page, $limit, $search, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -554,15 +557,16 @@ class CompanyApi
      * @param  string[]|null $names (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
+     * @param  string|null $search (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCompanies'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function getCompaniesAsyncWithHttpInfo($rncs = null, $names = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['getCompanies'][0])
+    public function getCompaniesAsyncWithHttpInfo($rncs = null, $names = null, $page = 1, $limit = 25, $search = null, string $contentType = self::contentTypes['getCompanies'][0])
     {
         $returnType = '\Ecfx\EcfDgii\Model\PaginatedApiResultOfCompanyResponse';
-        $request = $this->getCompaniesRequest($rncs, $names, $page, $limit, $contentType);
+        $request = $this->getCompaniesRequest($rncs, $names, $page, $limit, $search, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -607,12 +611,13 @@ class CompanyApi
      * @param  string[]|null $names (optional)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesPageParameter|null $page (optional, default to 1)
      * @param  \Ecfx\EcfDgii\Model\GetCompaniesLimitParameter|null $limit (optional, default to 25)
+     * @param  string|null $search (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCompanies'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getCompaniesRequest($rncs = null, $names = null, $page = 1, $limit = 25, string $contentType = self::contentTypes['getCompanies'][0])
+    public function getCompaniesRequest($rncs = null, $names = null, $page = 1, $limit = 25, $search = null, string $contentType = self::contentTypes['getCompanies'][0])
     {
 
 
@@ -625,6 +630,7 @@ class CompanyApi
             throw new \InvalidArgumentException("invalid value for \"limit\" when calling CompanyApi.getCompanies, must conform to the pattern /^-?(?:0|[1-9]\\d*)$/.");
         }
         
+
 
         $resourcePath = '/company';
         $formParams = [];
@@ -665,6 +671,15 @@ class CompanyApi
             $limit,
             'Limit', // param base name
             'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $search,
+            'Search', // param base name
+            'string', // openApiType
             'form', // style
             true, // explode
             false // required

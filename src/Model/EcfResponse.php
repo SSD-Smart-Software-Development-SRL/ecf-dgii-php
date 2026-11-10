@@ -79,6 +79,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => 'string',
         'secuencia_utilizada' => 'bool',
         'dgii_environment' => '\Ecfx\EcfDgii\Model\DGIIEnvironment',
+        'acecfs' => '\Ecfx\EcfDgii\Model\AcecfSummaryDto[]',
+        'receptor_directory_status' => '\Ecfx\EcfDgii\Model\ReceptorDirectoryStatus',
+        'dgii_submission_state' => '\Ecfx\EcfDgii\Model\DgiiSubmissionState',
         'impresion_url' => 'string'
     ];
 
@@ -112,6 +115,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => null,
         'secuencia_utilizada' => null,
         'dgii_environment' => null,
+        'acecfs' => null,
+        'receptor_directory_status' => null,
+        'dgii_submission_state' => null,
         'impresion_url' => null
     ];
 
@@ -143,6 +149,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => true,
         'secuencia_utilizada' => true,
         'dgii_environment' => false,
+        'acecfs' => false,
+        'receptor_directory_status' => true,
+        'dgii_submission_state' => true,
         'impresion_url' => true
     ];
 
@@ -254,6 +263,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => 'emisorReceptorErrors',
         'secuencia_utilizada' => 'secuenciaUtilizada',
         'dgii_environment' => 'dgiiEnvironment',
+        'acecfs' => 'acecfs',
+        'receptor_directory_status' => 'receptorDirectoryStatus',
+        'dgii_submission_state' => 'dgiiSubmissionState',
         'impresion_url' => 'impresionUrl'
     ];
 
@@ -285,6 +297,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => 'setEmisorReceptorErrors',
         'secuencia_utilizada' => 'setSecuenciaUtilizada',
         'dgii_environment' => 'setDgiiEnvironment',
+        'acecfs' => 'setAcecfs',
+        'receptor_directory_status' => 'setReceptorDirectoryStatus',
+        'dgii_submission_state' => 'setDgiiSubmissionState',
         'impresion_url' => 'setImpresionUrl'
     ];
 
@@ -316,6 +331,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'emisor_receptor_errors' => 'getEmisorReceptorErrors',
         'secuencia_utilizada' => 'getSecuenciaUtilizada',
         'dgii_environment' => 'getDgiiEnvironment',
+        'acecfs' => 'getAcecfs',
+        'receptor_directory_status' => 'getReceptorDirectoryStatus',
+        'dgii_submission_state' => 'getDgiiSubmissionState',
         'impresion_url' => 'getImpresionUrl'
     ];
 
@@ -398,6 +416,9 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('emisor_receptor_errors', $data ?? [], null);
         $this->setIfExists('secuencia_utilizada', $data ?? [], null);
         $this->setIfExists('dgii_environment', $data ?? [], null);
+        $this->setIfExists('acecfs', $data ?? [], null);
+        $this->setIfExists('receptor_directory_status', $data ?? [], null);
+        $this->setIfExists('dgii_submission_state', $data ?? [], null);
         $this->setIfExists('impresion_url', $data ?? [], null);
     }
 
@@ -1162,6 +1183,101 @@ class EcfResponse implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable dgii_environment cannot be null');
         }
         $this->container['dgii_environment'] = $dgii_environment;
+
+        return $this;
+    }
+
+    /**
+     * Gets acecfs
+     *
+     * @return \Ecfx\EcfDgii\Model\AcecfSummaryDto[]|null
+     */
+    public function getAcecfs()
+    {
+        return $this->container['acecfs'];
+    }
+
+    /**
+     * Sets acecfs
+     *
+     * @param \Ecfx\EcfDgii\Model\AcecfSummaryDto[]|null $acecfs ACECFs received from the receptor for this outbound ECF.
+     *
+     * @return self
+     */
+    public function setAcecfs($acecfs)
+    {
+        if (is_null($acecfs)) {
+            throw new \InvalidArgumentException('non-nullable acecfs cannot be null');
+        }
+        $this->container['acecfs'] = $acecfs;
+
+        return $this;
+    }
+
+    /**
+     * Gets receptor_directory_status
+     *
+     * @return \Ecfx\EcfDgii\Model\ReceptorDirectoryStatus|null
+     */
+    public function getReceptorDirectoryStatus()
+    {
+        return $this->container['receptor_directory_status'];
+    }
+
+    /**
+     * Sets receptor_directory_status
+     *
+     * @param \Ecfx\EcfDgii\Model\ReceptorDirectoryStatus|null $receptor_directory_status receptor_directory_status
+     *
+     * @return self
+     */
+    public function setReceptorDirectoryStatus($receptor_directory_status)
+    {
+        if (is_null($receptor_directory_status)) {
+            array_push($this->openAPINullablesSetToNull, 'receptor_directory_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('receptor_directory_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['receptor_directory_status'] = $receptor_directory_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets dgii_submission_state
+     *
+     * @return \Ecfx\EcfDgii\Model\DgiiSubmissionState|null
+     */
+    public function getDgiiSubmissionState()
+    {
+        return $this->container['dgii_submission_state'];
+    }
+
+    /**
+     * Sets dgii_submission_state
+     *
+     * @param \Ecfx\EcfDgii\Model\DgiiSubmissionState|null $dgii_submission_state Where the DGII transmission of this ECF stands. Null for documents created before durable submission. `PendingReconciliation`: DGII's answer is not confirmed yet; do not resend or reuse the eNCF. `NotReceived`: DGII confirmed it has no record of the document (Progress is Error, Estatus is null and SecuenciaUtilizada is false); the same eNCF may be submitted again as a new request.
+     *
+     * @return self
+     */
+    public function setDgiiSubmissionState($dgii_submission_state)
+    {
+        if (is_null($dgii_submission_state)) {
+            array_push($this->openAPINullablesSetToNull, 'dgii_submission_state');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('dgii_submission_state', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['dgii_submission_state'] = $dgii_submission_state;
 
         return $this;
     }

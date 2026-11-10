@@ -488,10 +488,11 @@ class ObjectSerializer
 
 
         if (method_exists($class, 'getAllowableEnumValues')) {
-            if (!in_array($data, $class::getAllowableEnumValues(), true)) {
-                $imploded = implode("', '", $class::getAllowableEnumValues());
-                throw new \InvalidArgumentException("Invalid value for enum '$class', must be one of: '$imploded'");
-            }
+            // Hand patch (src/ObjectSerializer.php is in .openapi-generator-ignore):
+            // the API may add enum values (e.g. a new DgiiSubmissionState) before
+            // this SDK is regenerated. Pass unknown values through as the raw
+            // string instead of throwing, so older SDK versions keep
+            // deserializing responses.
             return $data;
         } else {
             $data = is_string($data) ? json_decode($data) : $data;

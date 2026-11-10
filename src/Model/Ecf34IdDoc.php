@@ -59,11 +59,11 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     protected static $openAPITypes = [
         'tipoe_cf' => '\Ecfx\EcfDgii\Model\TipoeCFType',
         'encf' => 'string',
-        'indicador_nota_credito' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'indicador_nota_credito' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'indicador_envio_diferido' => '\Ecfx\EcfDgii\Model\IndicadorEnvioDiferidoType',
         'indicador_monto_gravado' => '\Ecfx\EcfDgii\Model\IndicadorMontoGravadoType',
         'indicador_servicio_todo_incluido' => '\Ecfx\EcfDgii\Model\IndicadorServicioTodoIncluidoType',
-        'tipo_ingresos' => '\Ecfx\EcfDgii\Model\Ecf34TipoIngresosValidationType',
+        'tipo_ingresos' => '\Ecfx\EcfDgii\Model\TipoIngresosValidationType',
         'tipo_pago' => '\Ecfx\EcfDgii\Model\Ecf34TipoPagoType',
         'fecha_limite_pago' => '\DateTime',
         'fecha_desde' => '\DateTime',
@@ -105,7 +105,7 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
         'indicador_envio_diferido' => true,
         'indicador_monto_gravado' => true,
         'indicador_servicio_todo_incluido' => true,
-        'tipo_ingresos' => false,
+        'tipo_ingresos' => true,
         'tipo_pago' => false,
         'fecha_limite_pago' => true,
         'fecha_desde' => true,
@@ -360,9 +360,6 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
         if ($this->container['indicador_nota_credito'] === null) {
             $invalidProperties[] = "'indicador_nota_credito' can't be null";
         }
-        if ($this->container['tipo_ingresos'] === null) {
-            $invalidProperties[] = "'tipo_ingresos' can't be null";
-        }
         if ($this->container['tipo_pago'] === null) {
             $invalidProperties[] = "'tipo_pago' can't be null";
         }
@@ -438,7 +435,7 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets indicador_nota_credito
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner
      */
     public function getIndicadorNotaCredito()
     {
@@ -448,7 +445,7 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets indicador_nota_credito
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress $indicador_nota_credito indicador_nota_credito
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner $indicador_nota_credito indicador_nota_credito
      *
      * @return self
      */
@@ -567,7 +564,7 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Gets tipo_ingresos
      *
-     * @return \Ecfx\EcfDgii\Model\Ecf34TipoIngresosValidationType
+     * @return \Ecfx\EcfDgii\Model\TipoIngresosValidationType|null
      */
     public function getTipoIngresos()
     {
@@ -577,14 +574,21 @@ class Ecf34IdDoc implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets tipo_ingresos
      *
-     * @param \Ecfx\EcfDgii\Model\Ecf34TipoIngresosValidationType $tipo_ingresos tipo_ingresos
+     * @param \Ecfx\EcfDgii\Model\TipoIngresosValidationType|null $tipo_ingresos tipo_ingresos
      *
      * @return self
      */
     public function setTipoIngresos($tipo_ingresos)
     {
         if (is_null($tipo_ingresos)) {
-            throw new \InvalidArgumentException('non-nullable tipo_ingresos cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'tipo_ingresos');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('tipo_ingresos', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['tipo_ingresos'] = $tipo_ingresos;
 

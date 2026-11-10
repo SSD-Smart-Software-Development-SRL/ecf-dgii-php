@@ -65,7 +65,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => 'string',
         'updated_by' => 'string',
         'tenant_id' => 'string',
-        'receptor_id' => 'string'
+        'receptor_id' => 'string',
+        'urls' => '\Ecfx\EcfDgii\Model\CompanyUrlsResponse',
+        'certification' => '\Ecfx\EcfDgii\Model\CertificationStateResponse',
+        'archived_at' => '\DateTime',
+        'archived_by' => 'string',
+        'archive_reason' => 'string'
     ];
 
     /**
@@ -84,7 +89,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => null,
         'updated_by' => null,
         'tenant_id' => 'uuid',
-        'receptor_id' => null
+        'receptor_id' => null,
+        'urls' => null,
+        'certification' => null,
+        'archived_at' => 'date-time',
+        'archived_by' => null,
+        'archive_reason' => null
     ];
 
     /**
@@ -101,7 +111,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => false,
         'updated_by' => false,
         'tenant_id' => false,
-        'receptor_id' => false
+        'receptor_id' => false,
+        'urls' => true,
+        'certification' => true,
+        'archived_at' => true,
+        'archived_by' => true,
+        'archive_reason' => true
     ];
 
     /**
@@ -198,7 +213,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => 'createdBy',
         'updated_by' => 'updatedBy',
         'tenant_id' => 'tenantId',
-        'receptor_id' => 'receptorId'
+        'receptor_id' => 'receptorId',
+        'urls' => 'urls',
+        'certification' => 'certification',
+        'archived_at' => 'archivedAt',
+        'archived_by' => 'archivedBy',
+        'archive_reason' => 'archiveReason'
     ];
 
     /**
@@ -215,7 +235,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => 'setCreatedBy',
         'updated_by' => 'setUpdatedBy',
         'tenant_id' => 'setTenantId',
-        'receptor_id' => 'setReceptorId'
+        'receptor_id' => 'setReceptorId',
+        'urls' => 'setUrls',
+        'certification' => 'setCertification',
+        'archived_at' => 'setArchivedAt',
+        'archived_by' => 'setArchivedBy',
+        'archive_reason' => 'setArchiveReason'
     ];
 
     /**
@@ -232,7 +257,12 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         'created_by' => 'getCreatedBy',
         'updated_by' => 'getUpdatedBy',
         'tenant_id' => 'getTenantId',
-        'receptor_id' => 'getReceptorId'
+        'receptor_id' => 'getReceptorId',
+        'urls' => 'getUrls',
+        'certification' => 'getCertification',
+        'archived_at' => 'getArchivedAt',
+        'archived_by' => 'getArchivedBy',
+        'archive_reason' => 'getArchiveReason'
     ];
 
     /**
@@ -301,6 +331,11 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
         $this->setIfExists('updated_by', $data ?? [], null);
         $this->setIfExists('tenant_id', $data ?? [], null);
         $this->setIfExists('receptor_id', $data ?? [], null);
+        $this->setIfExists('urls', $data ?? [], null);
+        $this->setIfExists('certification', $data ?? [], null);
+        $this->setIfExists('archived_at', $data ?? [], null);
+        $this->setIfExists('archived_by', $data ?? [], null);
+        $this->setIfExists('archive_reason', $data ?? [], null);
     }
 
     /**
@@ -584,6 +619,176 @@ class CompanyResponse implements ModelInterface, ArrayAccess, \JsonSerializable
             throw new \InvalidArgumentException('non-nullable receptor_id cannot be null');
         }
         $this->container['receptor_id'] = $receptor_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets urls
+     *
+     * @return \Ecfx\EcfDgii\Model\CompanyUrlsResponse|null
+     */
+    public function getUrls()
+    {
+        return $this->container['urls'];
+    }
+
+    /**
+     * Sets urls
+     *
+     * @param \Ecfx\EcfDgii\Model\CompanyUrlsResponse|null $urls urls
+     *
+     * @return self
+     */
+    public function setUrls($urls)
+    {
+        if (is_null($urls)) {
+            array_push($this->openAPINullablesSetToNull, 'urls');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('urls', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['urls'] = $urls;
+
+        return $this;
+    }
+
+    /**
+     * Gets certification
+     *
+     * @return \Ecfx\EcfDgii\Model\CertificationStateResponse|null
+     */
+    public function getCertification()
+    {
+        return $this->container['certification'];
+    }
+
+    /**
+     * Sets certification
+     *
+     * @param \Ecfx\EcfDgii\Model\CertificationStateResponse|null $certification CERT-01: the company's certification state.
+     *
+     * @return self
+     */
+    public function setCertification($certification)
+    {
+        if (is_null($certification)) {
+            array_push($this->openAPINullablesSetToNull, 'certification');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('certification', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['certification'] = $certification;
+
+        return $this;
+    }
+
+    /**
+     * Gets archived_at
+     *
+     * @return \DateTime|null
+     */
+    public function getArchivedAt()
+    {
+        return $this->container['archived_at'];
+    }
+
+    /**
+     * Sets archived_at
+     *
+     * @param \DateTime|null $archived_at When the company was archived; null while it is active.
+     *
+     * @return self
+     */
+    public function setArchivedAt($archived_at)
+    {
+        if (is_null($archived_at)) {
+            array_push($this->openAPINullablesSetToNull, 'archived_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('archived_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['archived_at'] = $archived_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets archived_by
+     *
+     * @return string|null
+     */
+    public function getArchivedBy()
+    {
+        return $this->container['archived_by'];
+    }
+
+    /**
+     * Sets archived_by
+     *
+     * @param string|null $archived_by Who archived it and why, the last time it was archived; kept after a restore as history.
+     *
+     * @return self
+     */
+    public function setArchivedBy($archived_by)
+    {
+        if (is_null($archived_by)) {
+            array_push($this->openAPINullablesSetToNull, 'archived_by');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('archived_by', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['archived_by'] = $archived_by;
+
+        return $this;
+    }
+
+    /**
+     * Gets archive_reason
+     *
+     * @return string|null
+     */
+    public function getArchiveReason()
+    {
+        return $this->container['archive_reason'];
+    }
+
+    /**
+     * Sets archive_reason
+     *
+     * @param string|null $archive_reason archive_reason
+     *
+     * @return self
+     */
+    public function setArchiveReason($archive_reason)
+    {
+        if (is_null($archive_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'archive_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('archive_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['archive_reason'] = $archive_reason;
 
         return $this;
     }

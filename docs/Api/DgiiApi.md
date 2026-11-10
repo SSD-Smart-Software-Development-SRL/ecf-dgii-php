@@ -6,7 +6,7 @@ All URIs are relative to https://api.test.ecfx.ssd.com.do, except if the operati
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**consultaDirectorioListado()**](DgiiApi.md#consultaDirectorioListado) | **GET** /dgii/{rnc}/consultadirectorio/listado |  |
+| [**consultaDirectorioListado()**](DgiiApi.md#consultaDirectorioListado) | **GET** /dgii/{rnc}/consultadirectorio/listado | [OBSOLETO] Listado completo del Directorio de la DGII |
 | [**consultaDirectorioObtenerDirectorioPorRnc()**](DgiiApi.md#consultaDirectorioObtenerDirectorioPorRnc) | **GET** /dgii/{rnc}/consultadirectorio/obtener-directorio-por-rnc |  |
 | [**consultaEstado()**](DgiiApi.md#consultaEstado) | **GET** /dgii/{rnc}/consultaestado/estado |  |
 | [**consultaRFCE()**](DgiiApi.md#consultaRFCE) | **GET** /dgii/{rnc}/consultarfce/consulta |  |
@@ -24,7 +24,9 @@ All URIs are relative to https://api.test.ecfx.ssd.com.do, except if the operati
 consultaDirectorioListado($rnc): \Ecfx\EcfDgii\Model\Directorio[]
 ```
 
+[OBSOLETO] Listado completo del Directorio de la DGII
 
+Obsoleto: la DGII deprecó el listado completo del Directorio y puede dejar de responder. Use GET /dgii/{rnc}/consultadirectorio/obtener-directorio-por-rnc para consultar un RNC.
 
 ### Example
 
@@ -461,7 +463,7 @@ try {
 ## `consultaTrackId()`
 
 ```php
-consultaTrackId($rnc, $rnc_emisor, $encf): \Ecfx\EcfDgii\Model\RespuestaConsultaTrackId
+consultaTrackId($rnc, $rnc_emisor, $encf): \Ecfx\EcfDgii\Model\TrackingDetalle[]
 ```
 
 
@@ -505,7 +507,7 @@ try {
 
 ### Return type
 
-[**\Ecfx\EcfDgii\Model\RespuestaConsultaTrackId**](../Model/RespuestaConsultaTrackId.md)
+[**\Ecfx\EcfDgii\Model\TrackingDetalle[]**](../Model/TrackingDetalle.md)
 
 ### Authorization
 

@@ -109,7 +109,15 @@ Archivos escritos a mano que si puedes modificar:
 - `src/EcfService.php`
 - `src/EcfFrontendClient.php`
 - `src/EcfProcessingException.php`
+- `src/EcfNotReceivedException.php`
 - `src/EcfPollingTimeoutException.php`
+- `tests/` (los tests reales; `test/` son stubs generados)
+
+Archivos generados con parches a mano (listados en `.openapi-generator-ignore` para que la regeneracion no los sobrescriba):
+- `src/Configuration.php` -- booleanos en el query string como `true`/`false`
+- `src/ObjectSerializer.php` -- valores de enum desconocidos se devuelven como string en vez de lanzar excepcion
+
+Para regenerar usa openapi-generator 7.20.0 (ver `README.md`, seccion "Regenerar desde OpenAPI Spec").
 
 ## Contacto
 

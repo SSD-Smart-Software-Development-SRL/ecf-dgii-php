@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Ecfx\EcfDgii;
 
 use Ecfx\EcfDgii\Api\EcfApi;
-use Ecfx\EcfDgii\Model\ECF;
+use Ecfx\EcfDgii\Model\DgiiSubmissionState;
 use Ecfx\EcfDgii\Model\EcfProgress;
 use Ecfx\EcfDgii\Model\EcfResponse;
+use Ecfx\EcfDgii\Model\ModelInterface;
 use Ecfx\EcfDgii\Model\TipoeCFType;
 
 /**
@@ -63,7 +64,13 @@ class EcfService
      * 4. Polls using the returned messageId until processing is Finished or Error
      * 5. Returns the final EcfResponse
      *
-     * @param ECF      $ecf               The ECF document to send
+     * DGII submission states (EcfResponse::getDgiiSubmissionState()):
+     * - PendingReconciliation: DGII's result is not confirmed yet. Polling continues;
+     *   do NOT resend or reuse the eNCF.
+     * - NotReceived: DGII confirmed it has no record of the document. Throws
+     *   EcfNotReceivedException; the same eNCF may be submitted again as a new request.
+     *
+     * @param ModelInterface $ecf         The ECF document to send (Ecf31ECF, Ecf32ECF, ...)
      * @param int|null $maxAttempts        Override max polling attempts
      * @param int|null $intervalSeconds    Override polling interval
      *
@@ -72,10 +79,11 @@ class EcfService
      * @throws ApiException           On API communication errors
      * @throws \RuntimeException      If ECF type is unsupported
      * @throws EcfPollingTimeoutException If polling exceeds max attempts
+     * @throws EcfNotReceivedException    If DGII has no record of the document (eNCF can be resubmitted)
      * @throws EcfProcessingException     If DGII returns an error during processing
      */
     public function sendEcf(
-        ECF $ecf,
+        ModelInterface $ecf,
         ?int $maxAttempts = null,
         ?int $intervalSeconds = null,
     ): EcfResponse {
@@ -99,6 +107,7 @@ class EcfService
         $rnc = $ecf->getEncabezado()->getEmisor()->getRncEmisor();
 
         // 3. Poll until Finished or Error
+        $latest = null;
         for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
             sleep($intervalSeconds);
 
@@ -111,8 +120,21 @@ class EcfService
             $latest = $results[0];
             $progress = $latest->getProgress();
 
+            // Checked before Error: NotReceived also reports progress=Error.
+            if (self::canResubmitSameEncf($latest)) {
+                throw new EcfNotReceivedException(
+                    "DGII has no record of eNCF {$latest->getEncf()}; it was not used and may be submitted again: "
+                    . ($latest->getErrors() ?? $latest->getMensaje() ?? 'NotReceived'),
+                    $latest
+                );
+            }
+
             if ($progress === EcfProgress::FINISHED) {
                 return $latest;
+            }
+
+            if (self::isPendingReconciliation($latest)) {
+                continue;
             }
 
             if ($progress === EcfProgress::ERROR) {
@@ -124,9 +146,42 @@ class EcfService
             }
         }
 
+        if ($latest !== null && self::isPendingReconciliation($latest)) {
+            throw new EcfPollingTimeoutException(
+                "ECF polling timed out after {$maxAttempts} attempts for message {$messageId}: "
+                . "DGII result not confirmed yet (PendingReconciliation). Do not resend or reuse "
+                . "eNCF {$latest->getEncf()}; query it again later.",
+                null,
+                $latest
+            );
+        }
+
         throw new EcfPollingTimeoutException(
-            "ECF polling timed out after {$maxAttempts} attempts for message {$messageId}"
+            "ECF polling timed out after {$maxAttempts} attempts for message {$messageId}",
+            null,
+            $latest
         );
+    }
+
+    /**
+     * True while DGII's result for the document is not confirmed yet
+     * (dgiiSubmissionState = PendingReconciliation). Keep polling; do NOT
+     * resend or reuse the eNCF.
+     */
+    public static function isPendingReconciliation(EcfResponse $response): bool
+    {
+        return $response->getDgiiSubmissionState() === DgiiSubmissionState::PENDING_RECONCILIATION;
+    }
+
+    /**
+     * True when DGII confirmed it has no record of the document
+     * (dgiiSubmissionState = NotReceived). This is a final state for the
+     * request, but the eNCF was not used: the same eNCF may be submitted
+     * again as a new request.
+     */
+    public static function canResubmitSameEncf(EcfResponse $response): bool
+    {
+        return $response->getDgiiSubmissionState() === DgiiSubmissionState::NOT_RECEIVED;
     }
 
     /**

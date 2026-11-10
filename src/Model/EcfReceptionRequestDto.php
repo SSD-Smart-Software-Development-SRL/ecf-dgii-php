@@ -61,14 +61,17 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'tenant_id' => 'string',
         'company_rnc' => 'string',
         'file_name' => 'string',
-        'progress' => '\Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress',
+        'progress' => '\Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner',
         'created_on' => '\DateTime',
         'updated_on' => '\DateTime',
         'error_message' => 'string',
         'encf' => 'string',
         'rnc_emisor' => 'string',
         'tipo_ecf' => '\Ecfx\EcfDgii\Model\AllTipoECFTypes',
-        'result_internal_file_name' => 'string'
+        'result_internal_file_name' => 'string',
+        'monto_total' => '\Ecfx\EcfDgii\Model\EcfReceptionRequestDtoMontoTotal',
+        'reprocessed_on' => '\DateTime',
+        'recuperada' => 'bool'
     ];
 
     /**
@@ -90,7 +93,10 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'encf' => null,
         'rnc_emisor' => null,
         'tipo_ecf' => null,
-        'result_internal_file_name' => null
+        'result_internal_file_name' => null,
+        'monto_total' => null,
+        'reprocessed_on' => 'date-time',
+        'recuperada' => null
     ];
 
     /**
@@ -110,7 +116,10 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'encf' => true,
         'rnc_emisor' => true,
         'tipo_ecf' => true,
-        'result_internal_file_name' => true
+        'result_internal_file_name' => true,
+        'monto_total' => true,
+        'reprocessed_on' => true,
+        'recuperada' => false
     ];
 
     /**
@@ -210,7 +219,10 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'encf' => 'encf',
         'rnc_emisor' => 'rncEmisor',
         'tipo_ecf' => 'tipoEcf',
-        'result_internal_file_name' => 'resultInternalFileName'
+        'result_internal_file_name' => 'resultInternalFileName',
+        'monto_total' => 'montoTotal',
+        'reprocessed_on' => 'reprocessedOn',
+        'recuperada' => 'recuperada'
     ];
 
     /**
@@ -230,7 +242,10 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'encf' => 'setEncf',
         'rnc_emisor' => 'setRncEmisor',
         'tipo_ecf' => 'setTipoEcf',
-        'result_internal_file_name' => 'setResultInternalFileName'
+        'result_internal_file_name' => 'setResultInternalFileName',
+        'monto_total' => 'setMontoTotal',
+        'reprocessed_on' => 'setReprocessedOn',
+        'recuperada' => 'setRecuperada'
     ];
 
     /**
@@ -250,7 +265,10 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         'encf' => 'getEncf',
         'rnc_emisor' => 'getRncEmisor',
         'tipo_ecf' => 'getTipoEcf',
-        'result_internal_file_name' => 'getResultInternalFileName'
+        'result_internal_file_name' => 'getResultInternalFileName',
+        'monto_total' => 'getMontoTotal',
+        'reprocessed_on' => 'getReprocessedOn',
+        'recuperada' => 'getRecuperada'
     ];
 
     /**
@@ -322,6 +340,9 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
         $this->setIfExists('rnc_emisor', $data ?? [], null);
         $this->setIfExists('tipo_ecf', $data ?? [], null);
         $this->setIfExists('result_internal_file_name', $data ?? [], null);
+        $this->setIfExists('monto_total', $data ?? [], null);
+        $this->setIfExists('reprocessed_on', $data ?? [], null);
+        $this->setIfExists('recuperada', $data ?? [], null);
     }
 
     /**
@@ -477,7 +498,7 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Gets progress
      *
-     * @return \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null
+     * @return \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null
      */
     public function getProgress()
     {
@@ -487,7 +508,7 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets progress
      *
-     * @param \Ecfx\EcfDgii\Model\AcecfReceptionRequestDtoProgress|null $progress progress
+     * @param \Ecfx\EcfDgii\Model\SearchEcfReceptionRequestsTiposEcfsParameterInner|null $progress progress
      *
      * @return self
      */
@@ -721,6 +742,101 @@ class EcfReceptionRequestDto implements ModelInterface, ArrayAccess, \JsonSerial
             }
         }
         $this->container['result_internal_file_name'] = $result_internal_file_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets monto_total
+     *
+     * @return \Ecfx\EcfDgii\Model\EcfReceptionRequestDtoMontoTotal|null
+     */
+    public function getMontoTotal()
+    {
+        return $this->container['monto_total'];
+    }
+
+    /**
+     * Sets monto_total
+     *
+     * @param \Ecfx\EcfDgii\Model\EcfReceptionRequestDtoMontoTotal|null $monto_total monto_total
+     *
+     * @return self
+     */
+    public function setMontoTotal($monto_total)
+    {
+        if (is_null($monto_total)) {
+            array_push($this->openAPINullablesSetToNull, 'monto_total');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('monto_total', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['monto_total'] = $monto_total;
+
+        return $this;
+    }
+
+    /**
+     * Gets reprocessed_on
+     *
+     * @return \DateTime|null
+     */
+    public function getReprocessedOn()
+    {
+        return $this->container['reprocessed_on'];
+    }
+
+    /**
+     * Sets reprocessed_on
+     *
+     * @param \DateTime|null $reprocessed_on When the reception was run again after it ended without registering the e-CF.
+     *
+     * @return self
+     */
+    public function setReprocessedOn($reprocessed_on)
+    {
+        if (is_null($reprocessed_on)) {
+            array_push($this->openAPINullablesSetToNull, 'reprocessed_on');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reprocessed_on', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reprocessed_on'] = $reprocessed_on;
+
+        return $this;
+    }
+
+    /**
+     * Gets recuperada
+     *
+     * @return bool|null
+     */
+    public function getRecuperada()
+    {
+        return $this->container['recuperada'];
+    }
+
+    /**
+     * Sets recuperada
+     *
+     * @param bool|null $recuperada True when the first reception failed and the e-CF was registered by running it again, so the UI can flag it as recovered.
+     *
+     * @return self
+     */
+    public function setRecuperada($recuperada)
+    {
+        if (is_null($recuperada)) {
+            throw new \InvalidArgumentException('non-nullable recuperada cannot be null');
+        }
+        $this->container['recuperada'] = $recuperada;
 
         return $this;
     }
